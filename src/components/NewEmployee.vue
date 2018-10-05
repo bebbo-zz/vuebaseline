@@ -1,12 +1,12 @@
 <template>
     <div id="new-employee">
-        <h3>New Employee</h3>
+        <h3>New Product</h3>
         <div class="row">
             <form @submit.prevent="saveEmployee" class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
                         <input type="text" v-model="employee_id" required>
-                        <label>Employee ID</label>
+                        <label>Product ID</label>
                     </div>
                 </div>
                 <div class="row">
@@ -18,13 +18,13 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <input type="text" v-model="dept" required>
-                        <label>Department</label>
+                        <label>Category</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
                         <input type="text" v-model="position" required>
-                        <label>Position</label>
+                        <label>Description</label>
                     </div>
                 </div>
                 <button type="submit" class="btn">Submit</button>

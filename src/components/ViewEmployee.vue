@@ -2,9 +2,9 @@
     <div id="view-employee">
         <ul class="colection with-header">
             <li class="collection-header"><h4>{{name}}</h4></li>
-            <li class="collection-item">Employee ID: {{employee_id}}</li>
-            <li class="collection-item">Department: {{dept}}</li>
-            <li class="collection-item">Position: {{position}}</li>
+            <li class="collection-item">Product ID: {{employee_id}}</li>
+            <li class="collection-item">Category: {{dept}}</li>
+            <li class="collection-item">Description: {{position}}</li>
         </ul>
         <router-link to="/" class="btn grey">Back</router-link>
         <button @click="deleteEmployee" class="btn red">Delete</button>
