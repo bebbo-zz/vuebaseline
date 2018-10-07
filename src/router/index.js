@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
 import Display from '@/components/Display'
-import EditEmployee from '@/components/EditEmployee'
-import ViewEmployee from '@/components/ViewEmployee'
-import NewEmployee from '@/components/NewEmployee'
+import EditProduct from '@/components/EditProduct'
+import ViewProduct from '@/components/ViewProduct'
+import NewProduct from '@/components/NewProduct'
 
 Vue.use(Router)
 
@@ -16,24 +15,19 @@ export default new Router({
       component: Display
     },
     {
-      path: '/products',
-      name: 'dashboard',
-      component: Dashboard
-    },
-    {
       path: '/new',
-      name: 'new-employee',
-      component: NewEmployee
+      name: 'new-product',
+      component: NewProduct
     },
     {
-      path: '/edit/:employee_id',
-      name: 'edit-employee',
-      component: EditEmployee
+      path: '/edit/:product_id',
+      name: 'edit-product',
+      component: EditProduct
     },
     {
-      path: '/:employee_id',
-      name: 'view-employee',
-      component: ViewEmployee
+      path: '/:product_id',
+      name: 'view-product',
+      component: ViewProduct
     }
   ]
 })

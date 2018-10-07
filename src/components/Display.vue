@@ -1,10 +1,26 @@
 <template>
 <div>
+    <div class="row" v-for="i in Math.ceil(products.length / 3)" v-bind:key="i">
+        <div v-for="product in products.slice((i - 1) * 3, i * 3)" v-bind:key="product.id" class="col-md-4 col-6 my-1">
+            <b-card 
+                v-bind:img-src="product.imageUrl"
+                img-fluid
+                img-alt="image"
+                overlay>
+            <!-- img-src="https://picsum.photos/400/400/?image=41"
+                 {{item}} -->
+                <div slot="footer">
+                    <small class="text-muted">{{product.name}}<br />{{product.price}} VND</small>
+                </div>
+            </b-card>
+        </div>
+    </div>
+    
     <!--img v-bind:src="imageLink" height="48" width="48" /-->
     <ul class="collection with-header">
         <li class="collection-header">
-            <h4>Products</h4>
-            <div class="action-btn">
+            <!--h4>Products</h4-->
+            <div class="fixed-action-btn">
                 <router-link to="/new" class="btn-floating btn-large red">
                     <i class="fa fa-plus"></i>
                 </router-link>
@@ -15,7 +31,7 @@
                 <div class="chip">{{product.category}}</div>
                 {{product.barcode}}:{{product.name}}
                 <b>{{product.price}} VND</b>
-                <router-link v-bind:to="{name: 'view-employee', params: {product_id: product.id}}" class="secondary-content">
+                <router-link v-bind:to="{name: 'view-product', params: {product_id: product.id}}" class="secondary-content">
                     <i class="fa fa-eye"></i>
                 </router-link>
             </li>
@@ -28,23 +44,23 @@
 // storage reference:   gs://vnshoptest.appspot.com          
 import firebaseApp from './firebaseInit'
 
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue);
+
 export default {
     name: 'display',
     data () {
         return {
-            products: [],
+            products: []
             //imageLink: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png'  
         }
     },
     created () {
-        
-/*
-        pathReference.getDownloadURL().then(function(url) {
-            this.imageLink = url;
-        }).catch(function(error) {
-            // Handle any errors
-        });
-*/
         var db = firebaseApp.firestore();
         
         db.collection('products').get().then(querySnapshot => {
@@ -80,14 +96,12 @@ export default {
                 // Once the sign in completed, we get the download URL of the image
                 
                 vm.products.forEach(product => {
-                    console.log("hier")
                     var fileName = 'images/' + product.barcode + '.jpg'
-                    console.log(fileName)
-                    var pathReference = storage.ref(fileName);
+                    var pathReference = storage.ref(fileName)
                     pathReference.getDownloadURL().then(function(url) {
                         // Once we have the download URL, we set it to our img element
                         product.imageUrl = url
-                        console.log(url);
+                    //    console.log(url);
                     });
                 }).catch(function(error) {
                 // If anything goes wrong while getting the download URL, log the error

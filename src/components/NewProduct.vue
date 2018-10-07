@@ -50,7 +50,7 @@
 import firebaseApp from './firebaseInit'
 
 export default {
-    name: 'new-employee',
+    name: 'new-product',
     data () {
         return {
             product_id: null,
