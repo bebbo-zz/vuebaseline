@@ -5,36 +5,50 @@
             <form @submit.prevent="updateProduct" class="col s12">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input disabled type="text" v-model="barcode" required>
+                        <label>Barcode</label>
+                        <br />
+                        <input type="text" v-model="barcode" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input disabled type="text" v-model="article_number" required>
+                        <label>Article Number</label>
+                        <br />
+                        <input type="text" v-model="article_number" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input disabled type="text" v-model="name_ger" required>
+                        <label>Name (German)</label>
+                        <br />
+                        <input type="text" v-model="name_ger" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
+                        <label>Name (Display)</label>
+                        <br />
                         <input type="text" v-model="name" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
+                        <label>Price</label>
+                        <br />
                         <input type="text" v-model="price" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
+                        <label>Category</label>
+                        <br />
                         <input type="text" v-model="category" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
+                        <label>Description</label>
+                        <br />
                         <input type="text" v-model="description" required>
                     </div>
                 </div>
@@ -67,10 +81,10 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         var db = firebaseApp.firestore();
-
-        db.collection('products').where('product', '==', to.params.product_id).get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
+        console.log("routerbeforeenter: " + to.params.product_id)
+        var docRef = db.collection("products").doc(to.params.product_id);
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
                     next(vm => {
                         vm.product_id = doc.id,
                         vm.article_number = doc.data().article_number,
@@ -83,8 +97,13 @@ export default {
                         vm.price = doc.data().price,
                         vm.size = doc.data().size
                     })
-                })
-            })
+            } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+        }).catch(function(error) {
+                console.log("Error getting document:", error);
+        })
     },
     watch: {
         '$route': 'fetchData'
@@ -92,31 +111,35 @@ export default {
     methods: {
         fetchData () {
             var db = firebaseApp.firestore();
-
-            db.collection('product').where('product', '==', this.$route.params.product_id).get()
-                .then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        this.product_id = doc.id,
-                        this.article_number = doc.data().article_number,
-                        this.barcode = doc.data().barcode,
-                        this.category = doc.data().category,
-                        this.colour = doc.data().colour,
-                        this.description = doc.data().description,
-                        this.name = doc.data().name,
-                        this.name_ger = doc.data().name_ger,
-                        this.price = doc.data().price,
+            console.log("fetchdata: " + this.$route.params.product_id)
+            var docRef = db.collection("products").doc(this.$route.params.product_id);
+            // db.collection('products').where('barcode', '==', this.$route.params.product_id).get()
+            docRef.get().then(function(doc) {
+                if (doc.exists) {
+                        this.product_id = doc.id
+                        this.article_number = doc.data().article_number
+                        this.barcode = doc.data().barcode
+                        this.category = doc.data().category
+                        this.colour = doc.data().colour
+                        this.description = doc.data().description
+                        this.name = doc.data().name
+                        this.name_ger = doc.data().name_ger
+                        this.price = doc.data().price
                         this.size = doc.data().size
-                    })
-                })
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function(error) {
+                console.log("Error getting document:", error);
+            })
         },
         updateEmployee() {
             var db = firebaseApp.firestore();
-
-            db.collection('products').where('product', '==', this.$route.params.product).get()
-                .then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        doc.ref.update({
-                            product_id: doc.id,
+            console.log("fetchdata: " + this.$route.params.product_id)
+            var docRef = db.collection("products").doc(this.$route.params.product_id);
+            // db.collection('products').where('barcode', '==', this.$route.params.product_id).get()
+            docRef.update({
                             article_number: doc.data().article_number,
                             barcode: doc.data().barcode,
                             category: doc.data().category,
@@ -126,12 +149,10 @@ export default {
                             name_ger: doc.data().name_ger,
                             price: doc.data().price,
                             size: doc.data().size
-                        })
-                        .then(() => {
-                           this.$router.push({name: 'view-product', params: {product_id: this.product_id}}) 
-                        })
-                    })
-                })
+            })
+                .then(() => {
+                    this.$router.push({name: 'view-product', params: {product_id: this.product_id}}) 
+            })
         }
     }
 }

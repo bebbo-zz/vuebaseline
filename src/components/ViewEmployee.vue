@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import db from './firebaseInit'
+import firebaseApp from './firebaseInit'
 
 export default {
     name: 'view-employee',
@@ -30,6 +30,7 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
+        var db = firebaseApp.firestore();
         db.collection('employees').where('employee_id', '==', to.params.employee_id).get()
             .then(querySnapshot => {
                 querySnapshot.forEach(doc => {
@@ -47,6 +48,7 @@ export default {
     },
     methods: {
         fetchData () {
+            var db = firebaseApp.firestore();
             db.collection('employees').where('employee_id', '==', this.$route.params.employee_id).get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {
@@ -59,6 +61,7 @@ export default {
         },
         deleteEmployee() {
             if(confirm('Are you sure?')) {
+                var db = firebaseApp.firestore();
                 db.collection('employees').where('employee_id', '==', this.$route.params.employee_id).get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(doc => {

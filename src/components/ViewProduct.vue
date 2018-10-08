@@ -42,61 +42,69 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         var db = firebaseApp.firestore();
-
-        db.collection('products').where('product_id', '==', to.params.product_id).get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(doc => {
-                    next(vm => {
-                        vm.product_id = doc.id,
-                        vm.article_number = doc.data().article_number,
-                        vm.barcode = doc.data().barcode,
-                        vm.category = doc.data().category,
-                        vm.colour = doc.data().colour,
-                        vm.description = doc.data().description,
-                        vm.name = doc.data().name,
-                        vm.name_ger = doc.data().name_ger,
-                        vm.price = doc.data().price,
+        console.log("routerbeforeenter: " + to.params.product_id)
+        var docRef = db.collection("products").doc(to.params.product_id);
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+             //   console.log("Document data:", doc.data());
+                next(vm => {
+                        vm.product_id = doc.id
+                        vm.article_number = doc.data().article_number
+                        vm.barcode = doc.data().barcode
+                        vm.category = doc.data().category
+                        vm.colour = doc.data().colour
+                        vm.description = doc.data().description
+                        vm.name = doc.data().name
+                        vm.name_ger = doc.data().name_ger
+                        vm.price = doc.data().price
                         vm.size = doc.data().size
                     })
-                })
-            })
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        })
     },
     watch: {
         '$route': 'fetchData'
     },
     methods: {
         fetchData () {
-            var db = firebaseApp.firestore();
-
-            db.collection('products').where('product_id', '==', this.$route.params.product_id).get()
-                .then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        this.product_id = doc.id,
-                        this.article_number = doc.data().article_number,
-                        this.barcode = doc.data().barcode,
-                        this.category = doc.data().category,
-                        this.colour = doc.data().colour,
-                        this.description = doc.data().description,
-                        this.name = doc.data().name,
-                        this.name_ger = doc.data().name_ger,
-                        this.price = doc.data().price,
-                        this.size = doc.data().size
-                    })
-                })
-        },
-        deleteproduct() {
+           var db = firebaseApp.firestore();
+           console.log("fetchdata: " + this.$route.params.product_id)
+            var docRef = db.collection("products").doc(this.$route.params.product_id);
+           // db.collection('products').where('barcode', '==', this.$route.params.product_id).get()
+           docRef.get().then(function(doc) {
+                if (doc.exists) {
+                //   console.log("Document data:", doc.data());
+                    this.product_id = doc.id
+                            this.article_number = doc.data().article_number
+                            this.barcode = doc.data().barcode
+                            this.category = doc.data().category
+                            this.colour = doc.data().colour
+                            this.description = doc.data().description
+                            this.name = doc.data().name
+                            this.name_ger = doc.data().name_ger
+                            this.price = doc.data().price
+                            this.size = doc.data().size
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function(error) {
+                console.log("Error getting document:", error);
+            })
+        } ,
+        deleteProduct() {
             if(confirm('Are you sure?')) {
                 var db = firebaseApp.firestore();
-
-                db.collection('products').where('product_id', '==', this.$route.params.product_id).get()
-                .then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        doc.ref.delete()
-                        this.$router.push('/')
-                    })
-                })
+                var docRef = db.collection("products").doc(this.$route.params.product_id);
+                docRef.delete()
+                this.$router.push('/')
             }
-        }
+        } 
     }
 }
 </script>

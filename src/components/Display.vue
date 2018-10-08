@@ -10,16 +10,19 @@
             <!-- img-src="https://picsum.photos/400/400/?image=41"
                  {{item}} -->
                 <div slot="footer">
-                    <small class="text-muted">{{product.name}}<br />{{product.price}} VND</small>
+                    <small class="text-muted">{{product.name}}<br />{{product.price}} VND</small>   
                 </div>
+                    <router-link v-bind:to="{name: 'view-product', params: {product_id: product.product_id}}" class="secondary-content">
+                        <i class="fa fa-eye"></i>
+                    </router-link>
             </b-card>
         </div>
     </div>
     
-    <!--img v-bind:src="imageLink" height="48" width="48" /-->
+    <!--img v-bind:src="imageLink" height="48" width="48" />
     <ul class="collection with-header">
         <li class="collection-header">
-            <!--h4>Products</h4-->
+            <h4>Products</h4>
             <div class="fixed-action-btn">
                 <router-link to="/new" class="btn-floating btn-large red">
                     <i class="fa fa-plus"></i>
@@ -31,11 +34,12 @@
                 <div class="chip">{{product.category}}</div>
                 {{product.barcode}}:{{product.name}}
                 <b>{{product.price}} VND</b>
-                <router-link v-bind:to="{name: 'view-product', params: {product_id: product.id}}" class="secondary-content">
+
+                <router-link v-bind:to="{name: 'view-product', params: {product_id: product.barcode}}" class="secondary-content">
                     <i class="fa fa-eye"></i>
                 </router-link>
             </li>
-        </ul>
+        </ul-->
 </div>
 </template>
 
@@ -62,12 +66,12 @@ export default {
     },
     created () {
         var db = firebaseApp.firestore();
-        
+
         db.collection('products').get().then(querySnapshot => {
             querySnapshot.forEach(doc => {
               //  console.log(doc.data());
                 const data = {
-                    'id': doc.id,
+                    'product_id': doc.id,
                     'article_number': doc.data().article_number,
                     'barcode': doc.data().barcode,
                     'category': doc.data().category,
@@ -81,6 +85,7 @@ export default {
                     'tags': null
                     // tags
                 }
+                console.log(doc.id)
                 this.products.push(data)
             })
             this.fetchData()
