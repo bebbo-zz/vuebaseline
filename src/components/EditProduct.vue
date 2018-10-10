@@ -4,14 +4,12 @@
         <div class="row">
             <form @submit.prevent="updateProduct" class="col s12">
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s6">
                         <label>Barcode</label>
                         <br />
                         <input type="text" v-model="barcode" required>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s6">
                         <label>Article Number</label>
                         <br />
                         <input type="text" v-model="article_number" required>
@@ -32,14 +30,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s6">
                         <label>Price</label>
                         <br />
                         <input type="text" v-model="price" required>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
+                    <div class="input-field col s6">
                         <label>Category</label>
                         <br />
                         <input type="text" v-model="category" required>
@@ -50,6 +46,13 @@
                         <label>Description</label>
                         <br />
                         <input type="text" v-model="description" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
+                        <br />
+                        <button @click="uploadFile" class="btn blue">Upload Image</button>
                     </div>
                 </div>
                 <button type="submit" class="btn">Submit</button>
@@ -76,7 +79,8 @@ export default {
             name_ger: null,
             price: null,
             size: null,
-            tags: null
+            tags: null,
+            file: null
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -134,9 +138,9 @@ export default {
                 console.log("Error getting document:", error);
             })
         },
-        updateEmployee() {
+        updateProduct() {
             var db = firebaseApp.firestore();
-            console.log("fetchdata: " + this.$route.params.product_id)
+            console.log("updateEmployee: " + this.$route.params.product_id)
             var docRef = db.collection("products").doc(this.$route.params.product_id);
             // db.collection('products').where('barcode', '==', this.$route.params.product_id).get()
             docRef.update({
@@ -153,6 +157,52 @@ export default {
                 .then(() => {
                     this.$router.push({name: 'view-product', params: {product_id: this.product_id}}) 
             })
+        },
+        fileSelected(event) {
+            this.file = event.target.files[0]
+            console.log(this.file)
+        },
+        uploadFile() {
+            var curFile = this.file
+            var curProductID = this.$route.params.product_id
+            firebaseApp.auth().signInAnonymously().then(function() {
+                    if(curFile != null) {
+                        var storageRef = firebaseApp.storage().ref();
+                        var storageSpace = "images/" + curProductID + "_0"
+                        var imageRef = storageRef.child(storageSpace)
+
+                        var uploadTask = imageRef.put(curFile);
+
+                        // Register three observers:
+                        // 1. 'state_changed' observer, called any time the state changes
+                        // 2. Error observer, called on failure
+                        // 3. Completion observer, called on successful completion
+                        uploadTask.on('state_changed', function(snapshot){
+                        // Observe state change events such as progress, pause, and resume
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        switch (snapshot.state) {
+                            case firebaseApp.storage.TaskState.PAUSED: // or 'paused'
+                            console.log('Upload is paused');
+                            break;
+                            case firebaseApp.storage.TaskState.RUNNING: // or 'running'
+                            console.log('Upload is running');
+                            break;
+                        }
+                        }, function(error) {
+                        // Handle unsuccessful uploads
+                            console.log(error)
+                        }, function() {
+                            // Handle successful uploads on complete
+                            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                                console.log('File available at', downloadURL);
+                            })
+                            // hier sollte das images ebenfalls in die Datenbank geschrieben werden
+                        })
+                    }
+                }) 
         }
     }
 }

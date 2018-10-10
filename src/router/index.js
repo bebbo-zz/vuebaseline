@@ -5,6 +5,9 @@ import EditProduct from '@/components/EditProduct'
 import ViewProduct from '@/components/ViewProduct'
 import NewProduct from '@/components/NewProduct'
 import ViewEmployee from '@/components/ViewEmployee'
+import Login from '@/components/Login'
+import Register from '@/components/Register'
+import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
@@ -12,8 +15,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'display',
-      component: Display
+      name: 'hello-world',
+      component: HelloWorld
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
       path: '/new',

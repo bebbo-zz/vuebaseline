@@ -43,7 +43,7 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <b-form-file v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
+                        <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
                     </div>
                 </div>
                 <button type="submit" class="btn">Submit</button>
@@ -93,12 +93,15 @@ export default {
                 size: this.size
             })
             .then(docRef => {
+                var curFile = this.file
+                var curProductID = docRef.id
                 firebaseApp.auth().signInAnonymously().then(function() {
-              
-                    console.log("document added on id: " + docRef.id)
-                    if(file != null) {
-                        var storageSpace = "images/" + docRef.id + "_0"
-                        var uploadTask = storageRef.child('images/rivers.jpg').put(file);
+                    if(curFile != null) {
+                        var storageRef = firebaseApp.storage().ref();
+                        var storageSpace = "images/" + curProductID + "_0"
+                        var imageRef = storageRef.child(storageSpace)
+
+                        var uploadTask = imageRef.put(curFile);
 
                         // Register three observers:
                         // 1. 'state_changed' observer, called any time the state changes
@@ -110,31 +113,35 @@ export default {
                         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         console.log('Upload is ' + progress + '% done');
                         switch (snapshot.state) {
-                            case firebase.storage.TaskState.PAUSED: // or 'paused'
+                            case firebaseApp.storage.TaskState.PAUSED: // or 'paused'
                             console.log('Upload is paused');
                             break;
-                            case firebase.storage.TaskState.RUNNING: // or 'running'
+                            case firebaseApp.storage.TaskState.RUNNING: // or 'running'
                             console.log('Upload is running');
                             break;
                         }
                         }, function(error) {
                         // Handle unsuccessful uploads
+                            console.log(error)
                         }, function() {
                             // Handle successful uploads on complete
                             // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                                console.log('File available at', downloadURL);
-                            })
+                           // uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                           //     console.log('File available at', downloadURL);
+                           // })
                             // hier sollte das images ebenfalls in die Datenbank geschrieben werden
                         })
                     }
-                })  
+                }) 
                 this.$router.push('/')
             })
             .catch(error => {
                 console.log(err)
             })
         }
+    },
+    fileSelected(event) {
+            this.file = event.target.files[0]
     }
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
 <div>
     <div class="fixed-action-btn">
-                <router-link to="/new" class="btn-floating btn-large red">
-                    <i class="fa fa-plus"></i>
-                </router-link>
+        <router-link to="/new" class="btn-floating btn-large red">
+            <i class="fa fa-plus"></i>
+        </router-link>
     </div>
     <div class="row" v-for="i in Math.ceil(products.length / 3)" v-bind:key="i">
         <div v-for="product in products.slice((i - 1) * 3, i * 3)" v-bind:key="product.id" class="col-md-4 col-6 my-1">
