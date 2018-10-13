@@ -52,11 +52,18 @@
                     <div class="input-field col s12">
                         <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
                         <br />
-                        <button @click="uploadFile" class="btn blue">Upload Image</button>
+                        <button @click="uploadFile" class="btn blue"><i class="fa fa-file-upload"></i></button>
                     </div>
                 </div>
-                <button type="submit" class="btn">Submit</button>
-                <router-link to="/" class="btn grey">Cancel</router-link>
+
+                <router-link v-bind:to="{name: 'new-intake', params: {product_id: product_id}}" class="btn-floating btn-large red">
+                    <i class="fa fa-cart-plus"></i>
+                </router-link>
+
+                <button type="submit" class="btn" v-b-tooltip.hover title="Save"><i class="fa fa-save"></button>
+                <button @click="deleteProduct" class="btn red"><i class="fa fa-trash-alt"></i></button>
+                
+                <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
             </form>
         </div>
     </div>
@@ -157,6 +164,14 @@ export default {
                 .then(() => {
                     this.$router.push({name: 'view-product', params: {product_id: this.product_id}}) 
             })
+        },
+        deleteProduct() {
+            if(confirm('Are you sure?')) {
+                var db = firebaseApp.firestore();
+                var docRef = db.collection("products").doc(this.$route.params.product_id);
+                docRef.delete()
+                this.$router.push('/')
+            }
         },
         fileSelected(event) {
             this.file = event.target.files[0]

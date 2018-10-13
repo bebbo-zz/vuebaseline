@@ -53,13 +53,13 @@
 // storage reference:   gs://vnshoptest.appspot.com          
 import firebaseApp from './firebaseInit'
 
-import Vue from 'vue'
+/*import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue);*/
 
 export default {
     name: 'display',
@@ -106,7 +106,7 @@ export default {
                 // Once the sign in completed, we get the download URL of the image
                 
                 vm.products.forEach(product => {
-                    var fileName = 'images/' + product.barcode + '.jpg'
+                    var fileName = 'images/' + product.product_id + '_0'
                     var pathReference = storage.ref(fileName)
                     pathReference.getDownloadURL().then(function(url) {
                         // Once we have the download URL, we set it to our img element

@@ -4,10 +4,9 @@ import Display from '@/components/Display'
 import EditProduct from '@/components/EditProduct'
 import ViewProduct from '@/components/ViewProduct'
 import NewProduct from '@/components/NewProduct'
-import ViewEmployee from '@/components/ViewEmployee'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-import HelloWorld from '@/components/HelloWorld'
+import NewIntake from '@/components/NewIntake'
 
 Vue.use(Router)
 
@@ -15,8 +14,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'hello-world',
-      component: HelloWorld
+      name: 'display',
+      component: Display
     },
     {
       path: '/login',
@@ -34,14 +33,14 @@ export default new Router({
       component: NewProduct
     },
     {
+      path: '/newintake/:product_id',
+      name: 'new-intake',
+      component: NewIntake
+    },
+    {
       path: '/edit/:product_id',
       name: 'edit-product',
       component: EditProduct
-    },
-    {
-      path: '/test/:employee_id',
-      name: 'view-employee',
-      component: ViewEmployee
     },
     {
       path: '/:product_id',

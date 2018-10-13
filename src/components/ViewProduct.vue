@@ -1,16 +1,42 @@
 <template>
     <div id="view-product">
-        <ul class="colection with-header">
-            <li class="collection-header"><h4>{{name}}</h4></li>
-            <li class="collection-item">Barcode: {{barcode}}</li>
-            <li class="collection-item">Article Number: {{article_number}}</li>
-            <li class="collection-item">Name (German): {{name_ger}}</li>
-            <li class="collection-item">Price: {{price}}</li>
-            <li class="collection-item">Category: {{category}}</li>
-            <li class="collection-item">Description: {{description}}</li>
-        </ul>
-        <router-link to="/" class="btn grey">Back</router-link>
-        <button @click="deleteProduct" class="btn red">Delete</button>
+        <b-container>
+            <b-row>
+                <b-col>
+                    <!-- Gallerie -->
+                    <img v-bin:src="imageUrl" />
+                </b-col>
+                <b-col>
+                    <ul class="colection with-header">
+                        <li class="collection-header"><h4>{{name}}</h4></li>
+                        <li class="collection-item">Barcode: {{barcode}}</li>
+                        <li class="collection-item">Article Number: {{article_number}}</li>
+                        <li class="collection-item">Name (German): {{name_ger}}</li>
+                        <li class="collection-item">Category: {{category}}</li>
+                        <li class="collection-item">Description: {{description}}</li>
+                    </ul>
+                </b-col>
+                <b-col>
+                    <ul class="colection with-header">
+                        <li class="collection-item">Price: {{price}}</li>
+                    </ul>
+                </b-col>
+            </b-row>
+            <b-row>
+                <ul class="collection with-header">
+                    <li class="collection-header"><h4>Stock</h4></li>
+                    <li v-for="intake in intakes" v-bind:key="employee.id" class="collection-item">
+                        <div class="chip">{{employee.dept}}</div>
+                        {{employee.employee_id}}:{{employee.name}}
+
+                        <router-link v-bind:to="{name: 'view-employee', params: {employee_id: employee.employee_id}}" class="secondary-content">
+                            <i class="fa fa-eye"></i>
+                        </router-link>
+                    </li>
+                </ul>
+            </b-row>
+        </b-container>
+        <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
         <div class="fixed-action-btn">
             <router-link v-bind:to="{name: 'edit-product', params: {product_id: product_id}}" class="btn-floating btn-large red">
                 <i class="fa fa-pencil"></i>
@@ -37,10 +63,27 @@ export default {
             name_ger: null,
             price: null,
             size: null,
-            tags: null
+            tags: null,
+            imageUrl: null,
+            intakes: []
         }
     },
     beforeRouteEnter(to, from, next) {
+        var storage = firebaseApp.storage("gs://vnshoptest.appspot.com");
+        var curImgUrl = null
+            // First we sign in the user anonymously
+        firebaseApp.auth().signInAnonymously().then(function() {
+                // Once the sign in completed, we get the download URL of the image
+                
+                    var fileName = 'images/' + to.params.product_id + '_0'
+                    var pathReference = storage.ref(fileName)
+                    pathReference.getDownloadURL().then(function(url) {
+                        // Once we have the download URL, we set it to our img element
+                        curImgUrl = url
+                    //    console.log(url);
+                    });
+        });
+
         var db = firebaseApp.firestore();
         console.log("routerbeforeenter: " + to.params.product_id)
         var docRef = db.collection("products").doc(to.params.product_id);
@@ -58,6 +101,7 @@ export default {
                         vm.name_ger = doc.data().name_ger
                         vm.price = doc.data().price
                         vm.size = doc.data().size
+                        vm.imageUrl = curImgUrl
                     })
             } else {
                 // doc.data() will be undefined in this case
@@ -96,15 +140,7 @@ export default {
             }).catch(function(error) {
                 console.log("Error getting document:", error);
             })
-        } ,
-        deleteProduct() {
-            if(confirm('Are you sure?')) {
-                var db = firebaseApp.firestore();
-                var docRef = db.collection("products").doc(this.$route.params.product_id);
-                docRef.delete()
-                this.$router.push('/')
-            }
-        } 
+        }
     }
 }
 </script>

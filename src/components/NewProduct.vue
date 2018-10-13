@@ -2,7 +2,7 @@
     <div id="new-product">
         <h3>New Product</h3>
         <div class="row">
-            <form @submit.prevent="saveEmployee" class="col s12">
+            <form @submit.prevent="saveProduct" class="col s12">
                 <div class="row">
                     <div class="input-field col s6">
                         <input type="text" v-model="barcode" required>
@@ -46,8 +46,8 @@
                         <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
                     </div>
                 </div>
-                <button type="submit" class="btn">Submit</button>
-                <router-link to="/" class="btn grey">Cancel</router-link>
+                <button type="submit" class="btn"><i class="fa fa-save"></button>
+                <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
             </form>
         </div>
     </div>
@@ -76,8 +76,7 @@ export default {
         }
     },
     methods: {
-        saveEmployee () {
-            
+        saveProduct () {
 
             var db = firebaseApp.firestore();
 
