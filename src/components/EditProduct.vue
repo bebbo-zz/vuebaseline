@@ -56,6 +56,15 @@
                     </div>
                 </div>
 
+                 <b-row>
+                    <ul class="collection with-header">
+                        <li class="collection-header"><h4>Intake</h4></li>
+                        <li v-for="intake in intakes" v-bind:key="intake.id" class="collection-item">
+                            <div class="chip">{{intake.quantity}}</div>
+                            {{intake.purchase_price}}:{{intake.supplier}}
+                        </li>
+                    </ul>
+                </b-row>
                 <router-link v-bind:to="{name: 'new-intake', params: {product_id: product_id}}" class="btn-floating btn-large red">
                     <i class="fa fa-cart-plus"></i>
                 </router-link>
@@ -87,11 +96,26 @@ export default {
             price: null,
             size: null,
             tags: null,
-            file: null
+            file: null,
+            intakes: []
         }
     },
     beforeRouteEnter(to, from, next) {
         var db = firebaseApp.firestore();
+        var tempIntakes = []
+        db.collection('intakes').where('product_id', '==', to.params.product_id).get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    var data = {
+                        'id': doc.id,
+                        'purchase_price': doc.purchase_price,
+                        'quantity': doc.quantity,
+                        'supplier': doc.supplier
+                    }
+                    tempIntakes.push(data)
+                })
+            })
+
         console.log("routerbeforeenter: " + to.params.product_id)
         var docRef = db.collection("products").doc(to.params.product_id);
         docRef.get().then(function(doc) {
@@ -106,7 +130,8 @@ export default {
                         vm.name = doc.data().name,
                         vm.name_ger = doc.data().name_ger,
                         vm.price = doc.data().price,
-                        vm.size = doc.data().size
+                        vm.size = doc.data().size,
+                        vm.intakes = tempIntakes
                     })
             } else {
                     // doc.data() will be undefined in this case
@@ -143,6 +168,20 @@ export default {
                 }
             }).catch(function(error) {
                 console.log("Error getting document:", error);
+            })
+
+            db.collection('intakes').where('product_id', '==', this.$route.params.product_id).get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    var tempIntakes = []
+                    var data = {
+                        'id': doc.id,
+                        'purchase_price': doc.purchase_price,
+                        'quantity': doc.quantity,
+                        'supplier': doc.supplier
+                    }
+                    this.intakes.push(data)
+                })
             })
         },
         updateProduct() {

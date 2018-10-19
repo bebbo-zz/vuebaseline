@@ -22,19 +22,7 @@
                     </ul>
                 </b-col>
             </b-row>
-            <b-row>
-                <ul class="collection with-header">
-                    <li class="collection-header"><h4>Stock</h4></li>
-                    <li v-for="intake in intakes" v-bind:key="employee.id" class="collection-item">
-                        <div class="chip">{{employee.dept}}</div>
-                        {{employee.employee_id}}:{{employee.name}}
-
-                        <router-link v-bind:to="{name: 'view-employee', params: {employee_id: employee.employee_id}}" class="secondary-content">
-                            <i class="fa fa-eye"></i>
-                        </router-link>
-                    </li>
-                </ul>
-            </b-row>
+           
         </b-container>
         <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
         <div class="fixed-action-btn">
@@ -64,8 +52,7 @@ export default {
             price: null,
             size: null,
             tags: null,
-            imageUrl: null,
-            intakes: []
+            imageUrl: null
         }
     },
     beforeRouteEnter(to, from, next) {
