@@ -46,8 +46,8 @@
                         <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
                     </div>
                 </div>
-                <button type="submit" class="btn"><i class="fa fa-save"></button>
-                <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
+                <button type="submit" class="btn"><i class="fa fa-save"></i></button>
+                <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
             </form>
         </div>
     </div>

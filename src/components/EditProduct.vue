@@ -69,10 +69,10 @@
                     <i class="fa fa-cart-plus"></i>
                 </router-link>
 
-                <button type="submit" class="btn" v-b-tooltip.hover title="Save"><i class="fa fa-save"></button>
+                <button type="submit" class="btn" v-b-tooltip.hover title="Save"><i class="fa fa-save"></i></button>
                 <button @click="deleteProduct" class="btn red"><i class="fa fa-trash-alt"></i></button>
                 
-                <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
+                <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
             </form>
         </div>
     </div>

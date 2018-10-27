@@ -19,8 +19,8 @@
                         <label>Supplier</label>
                     </div>
                 </div>
-                <button type="submit" class="btn"><i class="fa fa-save"></button>
-                <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
+                <button type="submit" class="btn"><i class="fa fa-save"></i></button>
+                <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
             </form>
         </div>
     </div>

@@ -24,7 +24,7 @@
             </b-row>
            
         </b-container>
-        <router-link to="/" class="btn grey"><i class="fa fa-ban"></router-link>
+        <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
         <div class="fixed-action-btn">
             <router-link v-bind:to="{name: 'edit-product', params: {product_id: product_id}}" class="btn-floating btn-large red">
                 <i class="fa fa-pencil"></i>

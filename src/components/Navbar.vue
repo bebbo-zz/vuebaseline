@@ -9,14 +9,14 @@
                 </router-link-->
                 <b-row align-h="start">
                     <router-link to="/"><b-button><i class="fa fa-home"></i></b-button></router-link>                
+                    <router-link to="/">
                     <b-dropdown text="Category">
                             <b-dropdown-item href="#">Clothes</b-dropdown-item>
                             <b-dropdown-item href="#">Kitchen</b-dropdown-item>
                     </b-dropdown>
+                    </router-link>
                     <!--input size="sm" class="mr-sm-2" type="text" placeholder="Search" width="150" /-->
-                    <b-button><i class="fa fa-search"></b-button>
-                </b-row>
-                <b-row align-h="end">
+                    <router-link to="/"><b-button><i class="fa fa-search"></i></b-button></router-link>
                     <!-- maybe fas fa-user-circle -->
                     <router-link to="/login"><b-button><i class="fa fa-user-circle"></i></b-button></router-link>
                     <router-link to="/"><b-button><i class="fa fa-shopping-cart"></i></b-button></router-link>
