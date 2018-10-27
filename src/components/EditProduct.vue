@@ -52,29 +52,47 @@
                     <div class="input-field col s12">
                         <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
                         <br />
-                        <button @click="uploadFile" class="btn blue"><i class="fa fa-file-upload"></i></button>
+                        <button @click="uploadFile" class="btn blue"><i class="fa fa-plus-circle"></i></button>
                     </div>
                 </div>
 
                  <b-row>
                     <ul class="collection with-header">
-                        <li class="collection-header"><h4>Intake</h4></li>
+                        <li class="collection-header"><h4>Intakes</h4></li>
                         <li v-for="intake in intakes" v-bind:key="intake.id" class="collection-item">
                             <div class="chip">{{intake.quantity}}</div>
                             {{intake.purchase_price}}:{{intake.supplier}}
                         </li>
                     </ul>
                 </b-row>
-                <router-link v-bind:to="{name: 'new-intake', params: {product_id: product_id}}" class="btn-floating btn-large red">
-                    <i class="fa fa-cart-plus"></i>
-                </router-link>
-
-                <button type="submit" class="btn" v-b-tooltip.hover title="Save"><i class="fa fa-save"></i></button>
-                <button @click="deleteProduct" class="btn red"><i class="fa fa-trash-alt"></i></button>
                 
-                <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
+                <button @click="newIntake" class="btn" v-b-tooltip.hover title="Add Intake"><i class="fa fa-cart-arrow-down"></i></button>
+                <button @click="updateProduct" class="btn" v-b-tooltip.hover title="Save"><i class="fa fa-save"></i></button>
+                <button @click="deleteProduct" class="btn" v-b-tooltip.hover title="Delete Product"><i class="fa fa-trash"></i></button>
+                <router-link to="/" class="btn" v-b-tooltip.hover title="Cancel"><i class="fa fa-ban"></i></router-link>
             </form>
         </div>
+
+        <!-- Modal Component -->
+        <b-modal ref="modal1" title="New Intake">
+            <div class="row">
+                    <div class="input-field col s6">
+                        <input type="text" v-model="quantity" required>
+                        <label>Quantity</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input type="text" v-model="purchase_price" required>
+                        <label>Purchase Price</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" v-model="supplier" required>
+                        <label>Supplier</label>
+                    </div>
+                </div>
+        </b-modal>
+
     </div>
 </template>
 
@@ -97,7 +115,10 @@ export default {
             size: null,
             tags: null,
             file: null,
-            intakes: []
+            intakes: [],
+            newin_quantity: null,
+            newin_purchase_price: null,
+            newin_supplier: null
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -211,6 +232,10 @@ export default {
                 docRef.delete()
                 this.$router.push('/')
             }
+        },
+        newIntake() {
+            this.$refs.modal1.show()
+            
         },
         fileSelected(event) {
             this.file = event.target.files[0]

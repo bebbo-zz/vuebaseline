@@ -4,7 +4,7 @@
             <b-row>
                 <b-col>
                     <!-- Gallerie -->
-                    <img v-bin:src="imageUrl" />
+                    <img v-bind:src="imageUrl" width="400" height="400" />
                 </b-col>
                 <b-col>
                     <ul class="colection with-header">
@@ -26,6 +26,10 @@
         </b-container>
         <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
         <div class="fixed-action-btn">
+            <router-link v-bind:to="{name: 'view-product', params: {product_id: product_id}}" class="btn-floating btn-large red">
+                <i class="fa fa-cart-plus"></i>
+            </router-link>
+            <p>&nbsp;</p>
             <router-link v-bind:to="{name: 'edit-product', params: {product_id: product_id}}" class="btn-floating btn-large red">
                 <i class="fa fa-pencil"></i>
             </router-link>
@@ -64,10 +68,11 @@ export default {
                 
                     var fileName = 'images/' + to.params.product_id + '_0'
                     var pathReference = storage.ref(fileName)
+                    console.log(pathReference)
                     pathReference.getDownloadURL().then(function(url) {
                         // Once we have the download URL, we set it to our img element
                         curImgUrl = url
-                    //    console.log(url);
+                        console.log(url);
                     });
         });
 

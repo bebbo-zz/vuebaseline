@@ -20,6 +20,9 @@
                     <router-link v-bind:to="{name: 'view-product', params: {product_id: product.product_id}}" class="secondary-content">
                         <i class="fa fa-eye"></i>
                     </router-link>
+                    <router-link v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
+                        <i class="fa fa-pencil"></i>
+                    </router-link>
             </b-card>
         </div>
     </div>
