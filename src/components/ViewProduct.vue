@@ -4,7 +4,8 @@
             <b-row>
                 <b-col>
                     <!-- Gallerie -->
-                    <img v-bind:src="imageUrl" width="400" height="400" />
+                    <!-- v-for="item in upcomingMovies.slice(0, 3)" -->
+                    <img v-bind:src="pictures[0]" width="400" height="400" />
                 </b-col>
                 <b-col>
                     <ul class="colection with-header">
@@ -56,11 +57,11 @@ export default {
             price: null,
             size: null,
             tags: null,
-            imageUrl: null
+            pictures: []
         }
     },
     beforeRouteEnter(to, from, next) {
-        var storage = firebaseApp.storage("gs://vnshoptest.appspot.com");
+      /*  var storage = firebaseApp.storage("gs://vnshoptest.appspot.com");
         var curImgUrl = null
             // First we sign in the user anonymously
         firebaseApp.auth().signInAnonymously().then(function() {
@@ -75,9 +76,12 @@ export default {
                         console.log(url);
                     });
         });
+        */
+        // https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2FbX572QaOCEfqMODWKAzW_0?alt=media&token=d5334ef0-25a3-4e9c-82c5-44185e4a72e7
 
         var db = firebaseApp.firestore();
-        console.log("routerbeforeenter: " + to.params.product_id)
+//        console.log("routerbeforeenter: " + to.params.product_id)
+        
         var docRef = db.collection("products").doc(to.params.product_id);
         docRef.get().then(function(doc) {
             if (doc.exists) {
@@ -93,7 +97,7 @@ export default {
                         vm.name_ger = doc.data().name_ger
                         vm.price = doc.data().price
                         vm.size = doc.data().size
-                        vm.imageUrl = curImgUrl
+                        vm.pictures = doc.data().picsUrl
                     })
             } else {
                 // doc.data() will be undefined in this case
@@ -125,6 +129,7 @@ export default {
                             this.name_ger = doc.data().name_ger
                             this.price = doc.data().price
                             this.size = doc.data().size
+                            this.pictures = doc.data().picsUrl
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");

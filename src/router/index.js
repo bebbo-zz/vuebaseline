@@ -6,11 +6,11 @@ import ViewProduct from '@/components/ViewProduct'
 import NewProduct from '@/components/NewProduct'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-import NewIntake from '@/components/NewIntake'
+import firebaseApp from '@/components/firebaseInit'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -20,27 +20,34 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: {
+        requiresGuest: true
+      }
     },
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/new',
       name: 'new-product',
-      component: NewProduct
-    },
-    {
-      path: '/newintake/:product_id',
-      name: 'new-intake',
-      component: NewIntake
+      component: NewProduct,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/edit/:product_id',
       name: 'edit-product',
-      component: EditProduct
+      component: EditProduct,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/:product_id',
@@ -49,3 +56,41 @@ export default new Router({
     }
   ]
 })
+
+// Nav Guards
+router.beforeEach((to, from, next) => {
+  // check for requiredAuth
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    // check if NOT logged in
+    if(!firebaseApp.auth().currentUser) {
+      // go to login page
+      next({
+        path: '/login',
+        query: {
+          redirect: to.fullPath
+        }
+      });
+    } else {
+      // proceed to route
+      next();
+    }
+  } else if(to.matched.some(record => record.meta.requiresGuest)) {
+    // check if logged in
+    if(firebaseApp.auth().currentUser) {
+      // go to login page
+      next({
+        path: '/',
+        query: {
+          redirect: to.fullPath
+        }
+      });
+    } else {
+      // proceed to route
+      next();
+    }
+  } else {
+    next();
+  }
+})
+
+export default router;
