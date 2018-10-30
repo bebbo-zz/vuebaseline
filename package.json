@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",
+    "es6-promise": "^4.2.5",
     "firebase": "^5.5.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.2.6"
+    "vuetify": "^1.2.6",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

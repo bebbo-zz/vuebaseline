@@ -31,6 +31,7 @@
 
 <script>
 import firebaseApp from './firebaseInit'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'navbar',
@@ -40,6 +41,12 @@ export default {
             currentUser: false
         }
     },
+  /*  computed: {
+        itemsInCart(){
+        let cart = this.$store.getters.cartProducts;
+        return cart.reduce((accum, item) => accum + item.quantity, 0)
+        }
+    }, */
     created() {
         if(firebaseApp.auth().currentUser) {
             this.isLoggedIn = true

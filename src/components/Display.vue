@@ -23,6 +23,7 @@
                     <router-link v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
                         <i class="fa fa-pencil"></i>
                     </router-link>
+                    <button @click='addToCart(product)' class='button is-info'><i class="fa fa-cart-arrow-down"></i></button>
             </b-card>
         </div>
     </div>
@@ -52,17 +53,9 @@
 </template>
 
 <script>
-// import firebase from 'firebase'
 // storage reference:   gs://vnshoptest.appspot.com          
 import firebaseApp from './firebaseInit'
-
-/*import Vue from 'vue'
-import BootstrapVue from 'bootstrap-vue'
-
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(BootstrapVue);*/
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'display',
@@ -99,7 +92,12 @@ export default {
             this.fetchData()
         }) 
     },
+    computed: mapGetters({
+        products: 'allProducts',
+        length: 'getNumberOfProducts'
+    }),
     methods: {
+        ...mapActions(['addToCart']),
         fetchData: function () {
            var vm = this
 
