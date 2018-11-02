@@ -8,7 +8,7 @@
     <div class="row" v-for="i in Math.ceil(products.length / 3)" v-bind:key="i">
         <div v-for="product in products.slice((i - 1) * 3, i * 3)" v-bind:key="product.id" class="col-md-4 col-6 my-1">
             <b-card 
-                v-bind:img-src="product.imageUrl"
+                v-bind:img-src="product.picsUrl[0]"
                 img-fluid
                 img-alt="image"
                 overlay>
@@ -27,28 +27,6 @@
             </b-card>
         </div>
     </div>
-    
-    <!--img v-bind:src="imageLink" height="48" width="48" />
-    <ul class="collection with-header">
-        <li class="collection-header">
-            <h4>Products</h4>
-            <div class="fixed-action-btn">
-                <router-link to="/new" class="btn-floating btn-large red">
-                    <i class="fa fa-plus"></i>
-                </router-link>
-            </div>
-        </li>
-        <li v-for="product in products" v-bind:key="product.id" class="collection-item">
-                <img v-bind:src="product.imageUrl" height="80" width="80" />
-                <div class="chip">{{product.category}}</div>
-                {{product.barcode}}:{{product.name}}
-                <b>{{product.price}} VND</b>
-
-                <router-link v-bind:to="{name: 'view-product', params: {product_id: product.barcode}}" class="secondary-content">
-                    <i class="fa fa-eye"></i>
-                </router-link>
-            </li>
-        </ul-->
 </div>
 </template>
 
@@ -70,7 +48,12 @@ export default {
 
         db.collection('products').get().then(querySnapshot => {
             querySnapshot.forEach(doc => {
-              //  console.log(doc.data());
+                var definingPictures = null
+                if(doc.data().picsUrl == undefined) {
+                    definingPictures = ["https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2Fno-image-icon-6.png?alt=media&token=26b35e6e-bb99-4b69-b1a9-67646f1e3dbf"]
+                }else{
+                    definingPictures = doc.data().picsUrl
+                }
                 const data = {
                     'product_id': doc.id,
                     'article_number': doc.data().article_number,
@@ -82,11 +65,11 @@ export default {
                     'name_ger': doc.data().name_ger,
                     'price': doc.data().price,
                     'size': doc.data().size,
-                    'imageUrl': null,
+                    'picsUrl': definingPictures,
                     'tags': null
                     // tags
                 }
-                console.log(doc.id)
+                console.log(doc.data().picsUrl)
                 this.products.push(data)
             })
             this.fetchData()
@@ -97,8 +80,8 @@ export default {
         length: 'getNumberOfProducts'
     }),
     methods: {
-        ...mapActions(['addToCart']),
-        fetchData: function () {
+        ...mapActions(['addToCart'])
+   /*     fetchData: function () {
            var vm = this
 
             var storage = firebaseApp.storage("gs://vnshoptest.appspot.com");
@@ -119,7 +102,7 @@ export default {
                 console.error(error);
                 });
             });
-        }
+        } */
     }
     //  https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png
 }

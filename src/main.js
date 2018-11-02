@@ -7,6 +7,7 @@ import router from './router'
 //import firebaseApp from '@/components/firebaseInit'
 import firebase from 'firebase';
 import './components/firebaseInit';
+import store from './store';
 
 Vue.config.productionTip = false
 

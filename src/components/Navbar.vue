@@ -22,7 +22,7 @@
                     <b-button v-if="isLoggedIn"><i class="fa fa-user-circle"></i></b-button>
                     <b-button v-if="!isLoggedIn" v-on:click="login"><i class="fa fa-lock"></i></b-button>                    
                     <b-button v-if="isLoggedIn" v-on:click="logout"><i class="fa fa-unlock"></i></b-button>
-                    <b-button><i class="fa fa-shopping-cart"></i></b-button>
+                    <b-button v-on:click="cart"><i class="fa fa-shopping-cart"></i></b-button>
                     <!--router-link to="/register"><b-button>Register</b-button></router-link-->
                 </b-row>
             </b-collapse>
@@ -57,6 +57,11 @@ export default {
         home: function(e) {
             console.log('home')
             this.$router.push('/')
+            e.preventDefault()
+        },
+        home: function(e) {
+            console.log('cart')
+            this.$router.push('/cart')
             e.preventDefault()
         },
         logout: function(e) {
