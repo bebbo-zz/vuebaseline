@@ -72,6 +72,7 @@
                     <li v-for="i in picsLength" v-bind:key="i - 1" class="collection-item">
                         <img v-bind:src="picsUrl[i - 1]" width="150" height="150" />
                         <button @click="deletePicture(i - 1)" class="btn" v-b-tooltip.hover title="Delete Image"><i class="fa fa-trash"></i></button>
+                        <button @click="downloadPicture(i - 1)" class="btn" v-b-tooltip.hover title="Download Image"><i class="fa fa-download"></i></button>
                     </li>
                 </ul>
 
@@ -269,6 +270,25 @@ export default {
                 this.picsReference.splice(i, 1)
                 this.picsLength = this.picsLength - 1
             }
+        },  
+        downloadPicture(i) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        },
+        downloadPicture_beta(i) {
+            console.log("download: " + this.picsUrl[i])
+            var blob = null
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function(event) {
+                blob = xhr.response;
+            };
+            xhr.open('GET', this.picsUrl[i]);
+            xhr.send();
+            var link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = 'download.jpg'
+            link.click()
         },
         deleteProduct() {
             if(confirm('Are you sure?')) {

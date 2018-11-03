@@ -9,6 +9,7 @@ import Register from '@/components/Register'
 import Cart from '@/components/Cart'
 import Cashier from '@/components/Cashier'
 import Checkout from '@/components/Checkout'
+import Admin from '@/components/Admin'
 import firebaseApp from '@/components/firebaseInit'
 
 Vue.use(Router)
@@ -34,6 +35,11 @@ let router = new Router({
       path: '/checkout',
       name: 'checkout',
       component: Checkout
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin
     },
     {
       path: '/login',

@@ -24,6 +24,7 @@
                     <b-button v-if="isLoggedIn" v-on:click="logout"><i class="fa fa-unlock"></i></b-button>
                     <b-button v-on:click="cart"><i class="fa fa-shopping-cart"></i></b-button>
                     <b-button v-on:click="cashier"><i class="fa fa-laptop"></i></b-button>
+                    <b-button v-on:click="admin"><i class="fa fa-user-lock"></i></b-button>
                     <!--router-link to="/register"><b-button>Register</b-button></router-link-->
                 </b-row>
             </b-collapse>
@@ -68,6 +69,11 @@ export default {
         cashier: function(e) {
             console.log('cashier')
             this.$router.push('/cashier')
+            e.preventDefault()
+        },
+        admin: function(e) {
+            console.log('admin')
+            this.$router.push('/admin')
             e.preventDefault()
         },
         logout: function(e) {
