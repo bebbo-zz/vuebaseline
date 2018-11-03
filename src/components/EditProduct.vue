@@ -59,6 +59,14 @@
                     </ul>
                 </b-row>
 
+                <div class="row">
+                    <div class="input-field col s12">
+                        <b-form-file @change="thumbFileSelected" v-model="thumbFile" :state="Boolean(thumbFile)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a thumb picture..."></b-form-file>
+                        <br />
+                        <button @click="uploadThumbFile" class="btn blue"><i class="fa fa-plus-circle"></i></button>
+                    </div>
+                </div>
+
                 <ul class="collection with-header">
                     <li class="collection-header"><h4>Images</h4></li>
                     <li v-for="i in picsLength" v-bind:key="i - 1" class="collection-item">
@@ -134,7 +142,9 @@ export default {
             picsLength: null,
             newin_quantity: null,
             newin_purchase_price: null,
-            newin_supplier: null
+            newin_supplier: null,
+            thumbFile: null,
+            thumbUrl: null
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -245,7 +255,8 @@ export default {
                             picsUrl: this.picsUrl,
                             picsReference: this.picsReference,
                             picsLength: this.picsLength,
-                            picsMaxRef: this.picsMaxRef
+                            picsMaxRef: this.picsMaxRef,
+                            thumbUrl: this.thumbUrl
             })
                 .then(() => {
                     this.$router.push({name: 'edit-product', params: {product_id: this.product_id}}) 
@@ -297,10 +308,13 @@ export default {
                 console.log(err)
             })
         },
-        
         fileSelected(event) {
             this.file = event.target.files[0]
             console.log(this.file)
+        },
+        thumbFileSelected(event) {
+            this.thumbFile = event.target.files[0]
+            console.log(this.thumbFile)
         },
         uploadFile() {
             var curFile = this.file
@@ -350,8 +364,52 @@ export default {
                             // hier sollte das images ebenfalls in die Datenbank geschrieben werden
                         })
                     }
+                })
+        },
+        uploadThumbFile() {
+            var curFile = this.thumbFile
+            var curProductID = this.$route.params.product_id
+            var vm = this
+            firebaseApp.auth().signInAnonymously().then(function() {
+                    if(curFile != null) {
+                        var storageRef = firebaseApp.storage().ref();
+                        var storageSpace = "images/" + curProductID + "_thumb"
+                        var imageRef = storageRef.child(storageSpace)
+
+                        var uploadTask = imageRef.put(curFile);
+
+                        // Register three observers:
+                        // 1. 'state_changed' observer, called any time the state changes
+                        // 2. Error observer, called on failure
+                        // 3. Completion observer, called on successful completion
+                        uploadTask.on('state_changed', function(snapshot){
+                        // Observe state change events such as progress, pause, and resume
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        switch (snapshot.state) {
+                            case firebaseApp.storage.TaskState.PAUSED: // or 'paused'
+                            console.log('Upload is paused');
+                            break;
+                            case firebaseApp.storage.TaskState.RUNNING: // or 'running'
+                            console.log('Upload is running');
+                            break;
+                        }
+                        }, function(error) {
+                        // Handle unsuccessful uploads
+                            console.log(error)
+                        }, function() {
+                            // Handle successful uploads on complete
+                            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                                console.log('File available at', downloadURL);
+                                vm.thumbUrl.push(downloadURL);
+                                vm.thumbFile = null;
+                            })
+                            // hier sollte das images ebenfalls in die Datenbank geschrieben werden
+                        })
+                    }
             })
-            
         }
     }
 }

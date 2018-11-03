@@ -8,7 +8,7 @@
     <div class="row" v-for="i in Math.ceil(products.length / 3)" v-bind:key="i">
         <div v-for="product in products.slice((i - 1) * 3, i * 3)" v-bind:key="product.id" class="col-md-4 col-6 my-1">
             <b-card 
-                v-bind:img-src="product.picsUrl[0]"
+                v-bind:img-src="product.thumbUrl"
                 img-fluid
                 img-alt="image"
                 overlay>
@@ -48,11 +48,11 @@ export default {
 
         db.collection('products').get().then(querySnapshot => {
             querySnapshot.forEach(doc => {
-                var definingPictures = null
-                if(doc.data().picsUrl == undefined) {
-                    definingPictures = ["https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2Fno-image-icon-6.png?alt=media&token=26b35e6e-bb99-4b69-b1a9-67646f1e3dbf"]
+                var thumbPicture = null
+                if(doc.data().thumbUrl == undefined) {
+                    thumbPicture = "https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2Fno-image-icon-6.png?alt=media&token=4b4b8e91-6525-4607-b845-b2e8f0ce3b98"
                 }else{
-                    definingPictures = doc.data().picsUrl
+                    thumbPicture = doc.data().thumbUrl
                 }
                 const data = {
                     'product_id': doc.id,
@@ -65,11 +65,10 @@ export default {
                     'name_ger': doc.data().name_ger,
                     'price': doc.data().price,
                     'size': doc.data().size,
-                    'picsUrl': definingPictures,
+                    'thumbUrl': thumbPicture,
                     'tags': null
                     // tags
                 }
-                console.log(doc.data().picsUrl)
                 this.products.push(data)
             })
             this.fetchData()

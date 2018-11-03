@@ -27,7 +27,7 @@
     	</tbody>
 
     </table>
-    <p><button v-show="products.length" class='button is-primary' @click='checkout'>Checkout</button></p>
+    <p><button v-show="products.length" class='btn' @click='checkout'>Checkout</button></p>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
   	checkout(){
-  		alert('Pay us $' + this.total)
+  		this.$router.push('/checkout')
   	}
   }
 }

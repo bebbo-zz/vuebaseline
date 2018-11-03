@@ -7,6 +7,8 @@ import NewProduct from '@/components/NewProduct'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Cart from '@/components/Cart'
+import Cashier from '@/components/Cashier'
+import Checkout from '@/components/Checkout'
 import firebaseApp from '@/components/firebaseInit'
 
 Vue.use(Router)
@@ -22,6 +24,16 @@ let router = new Router({
       path: '/cart',
       name: 'cart',
       component: Cart
+    },
+    {
+      path: '/cashier',
+      name: 'cashier',
+      component: Cashier
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout
     },
     {
       path: '/login',
