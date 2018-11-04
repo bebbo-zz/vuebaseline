@@ -30,9 +30,13 @@ const getters = {
 // mutations
 const mutations = {
   addToCart(state, product) {
-    const record = state.added.find(p => p.id === product.id)
+    const record = state.added.find(p => p.product_id === product.product_id)
 
+    
     if (!record) {
+     // console.log("p id: " + p.id)
+      console.log("product id: " + product.product_id)
+      console.log(product.name)
           state.added.push(product)
           if(product.quantity == undefined) {
             Vue.set(product, 'quantity', 1);
