@@ -14,15 +14,16 @@
     		</tr>
     	</thead>
     	<tbody>
-    		<tr v-for="p in products" v-bind:key="p.id">
+    		<tr v-for="p in products" v-bind:key="p.product_id">
         		<td>{{ p.name }}</td>
-        		<td>${{ p.price }}</td>
+        		<td>{{ p.price }} VND</td>
         		<td>{{ p.quantity }}</td>
+            <td><button @click="removeFromCart(p)" class="btn" v-b-tooltip.hover title="Delete Entry"><i class="fa fa-trash"></i></button></td>
         	</tr>
         	<tr>
         		<td><b>Total:</b></td>
         		<td></td>
-        		<td><b>${{ total }}</b></td>
+        		<td><b>{{ total }} VND</b></td>
         	</tr>
     	</tbody>
 
@@ -32,8 +33,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
+  data() {
+    return {
+      totalSum: 0
+    }
+  },
   computed: {
     ...mapGetters({
       products: 'cartProducts'
@@ -45,9 +51,16 @@ export default {
     }
   },
   methods: {
-  	checkout(){
-  		this.$router.push('/checkout')
-  	}
+    ...mapActions(['removeFromCart', 'moveTotalSum']),
+  	checkout() {
+      this.totalSum = getTotalSum()
+      moveTotalSum(this.totalSum)
+    },
+    getTotalSum() {
+      return this.products.reduce((total, p) => {
+        return total + p.price * p.quantity
+      }, 0)
+    }
   }
 }
 </script>

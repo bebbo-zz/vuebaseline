@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="fixed-action-btn">
-            <router-link to="/new" class="btn-floating btn-large red">
+            <router-link v-if="isEmployee" to="/new" class="btn-floating btn-large red">
                 <i class="fa fa-plus"></i>
             </router-link>
         </div>
@@ -20,7 +20,7 @@
                         <router-link v-bind:to="{name: 'view-product', params: {product_id: product.product_id}}" class="secondary-content">
                             <i class="fa fa-eye"></i>
                         </router-link>
-                        <router-link v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
+                        <router-link v-if="isEmployee" v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
                             <i class="fa fa-pencil"></i>
                         </router-link>
                         <button @click='addToCart(product)' class='button is-info'><i class="fa fa-cart-arrow-down"></i></button>
@@ -39,11 +39,30 @@ export default {
     name: 'display',
     data () {
         return {
+            isLoggedIn: false,
+            currentUser: false,
+            isEmployee: false,
             products: []
         }
     },
     created () {
-        var db = firebaseApp.firestore();
+      var db = firebaseApp.firestore();
+
+      if(firebaseApp.auth().currentUser) {
+            this.isLoggedIn = true
+            this.currentUser = firebaseApp.auth().currentUser.email
+            console.log("this current user " + this.currentUser)
+
+            db.collection('users').where('email', '==', this.currentUser).get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    var role = doc.data().role
+                    if(role == 'employee') {
+                        this.isEmployee = true
+                    }
+                })
+            })
+      }
 
         db.collection('products').get().then(querySnapshot => {
             querySnapshot.forEach(doc => {

@@ -14,11 +14,9 @@
                             <b-dropdown-item href="#">Clothes</b-dropdown-item>
                             <b-dropdown-item href="#">Kitchen</b-dropdown-item>
                     </b-dropdown>
-                    <!--input size="sm" class="mr-sm-2" type="text" placeholder="Search" width="150" /-->
                     <b-button><i class="fa fa-search"></i></b-button>
-                    <!-- maybe fas fa-user-circle -->
                     <!--span v-if="isLoggedIn" class="black-text">{{currentUser}}</span-->
-                    <b-button v-if="isLoggedIn"><i class="fa fa-user-circle"></i></b-button>
+                    <!--b-button v-if="isLoggedIn"><i class="fa fa-user-circle"></i></b-button-->
                     <b-button v-if="!isLoggedIn" v-on:click="login"><i class="fa fa-lock"></i></b-button>                    
                     <b-button v-if="isLoggedIn" v-on:click="logout"><i class="fa fa-unlock"></i></b-button>
                     <b-button v-on:click="cart"><i class="fa fa-shopping-cart"></i></b-button>
@@ -60,12 +58,6 @@ export default {
             isEmployee: false,
         }
     },
-  /*  computed: {
-        itemsInCart(){
-        let cart = this.$store.getters.cartProducts;
-        return cart.reduce((accum, item) => accum + item.quantity, 0)
-        }
-    }, */
     created() {
         if(firebaseApp.auth().currentUser) {
             this.isLoggedIn = true
