@@ -6,7 +6,7 @@
             <form class="col s12">
                 <div class="row">
                     <div class="input-field col s6">
-                        <label>Barcode</label>
+                        <label>{{$t("barcode")}}</label>
                         <br />
                         <input type="text" v-model="barcode" required>
                     </div>
@@ -186,7 +186,8 @@ export default {
                         vm.picsUrl = doc.data().picsUrl,
                         vm.picsReference = doc.data().picsReference,
                         vm.picsLength = doc.data().picsLength,
-                        vm.picsMaxRef = doc.data().picsMaxRef
+                        vm.picsMaxRef = doc.data().picsMaxRef,
+                        vm.thumbUrl = doc.data().thumbUrl
                     })
             } else {
                     // doc.data() will be undefined in this case
@@ -234,6 +235,7 @@ export default {
                         this.picsReference = doc.data().picsReference
                         this.picsLength = doc.data().picsLength
                         this.picsMaxRef = doc.data().picsMaxRef
+                        this.thumbUrl = doc.data().thumbUrl
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
@@ -261,12 +263,15 @@ export default {
             if(this.colour == undefined) {
                 this.colour = ''
             }
+            if(this.thumbUrl == undefined) {
+                this.thumbUrl = ''
+            }
             docRef.update({
-                            article_number: this.article_number,
-                            barcode: this.barcode,
-                            category: this.category,
-                            colour: this.colour,
-                            description: this.description,
+                article_number: this.article_number,
+                barcode: this.barcode,
+                category: this.category,
+                colour: this.colour,
+                description: this.description,
                             name: this.name,
                             name_ger: this.name_ger,
                             price: this.price,
@@ -274,8 +279,8 @@ export default {
                             picsUrl: this.picsUrl,
                             picsReference: this.picsReference,
                             picsLength: this.picsLength,
-                            picsMaxRef: this.picsMaxRef,
-                            thumbUrl: this.thumbUrl
+                picsMaxRef: this.picsMaxRef,
+                thumbUrl: this.thumbUrl
             })
                 .then(() => {
                     this.$router.push({name: 'edit-product', params: {product_id: this.product_id}}) 
@@ -289,10 +294,6 @@ export default {
                 this.picsLength = this.picsLength - 1
             }
         },  
-        downloadPicture_old(i) {
-            var win = window.open(this.picsUrl[i], '_blank');
-            win.focus();
-        },
         downloadPicture(i) {
             console.log("download: " + this.picsUrl[i])
             var xhr = new XMLHttpRequest();
@@ -301,7 +302,7 @@ export default {
                 var returnedBlob = new Blob([xhr.response], {type: 'image/jpeg'});
                 var link = document.createElement('a')
                 link.href = window.URL.createObjectURL(returnedBlob)
-                link.download = 'download.jpg'
+                link.download = this.picsReference[i] + 'jpg'
                 link.click()
             };
             xhr.open('GET', this.picsUrl[i]);

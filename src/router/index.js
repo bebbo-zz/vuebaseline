@@ -11,6 +11,7 @@ import Cashier from '@/components/Cashier'
 import Checkout from '@/components/Checkout'
 import Admin from '@/components/Admin'
 import firebaseApp from '@/components/firebaseInit'
+import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ let router = new Router({
       path: '/',
       name: 'display',
       component: Display
+    },
+    {
+      path: '/test',
+      name: 'helloworld',
+      component: HelloWorld
     },
     {
       path: '/cart',

@@ -3,19 +3,15 @@
         <b-container>
             <b-row>
                 <b-col>
-                    <!-- Gallerie -->
-                    <b-carousel id="carousel1"
-                        controls
-                        indicators
-                        background="#ffffff"
-                        :interval="4000"
-                    >
-                        <b-carousel-slide v-for="picture in pictures" v-bind:key="picture">
-                            <img v-bind:src="picture" />
-                        </b-carousel-slide>
-                    </b-carousel>
-                    <!-- v-for="item in upcomingMovies.slice(0, 3)" -->
+                    <carousel :perPage="1">
+                      <slide v-for="picture in pictures" v-bind:key="picture">
+                        {{picture}}<br />
+                        <img v-bind:src="picture" width="400" height="400"/>
+                      </slide>
+                    </carousel>
                 </b-col>
+            </b-row>
+            <b-row>
                 <b-col>
                     <ul class="colection with-header">
                         <li class="collection-header"><h4>{{name}}</h4></li>
@@ -66,31 +62,11 @@ export default {
             price: null,
             size: null,
             tags: null,
-            pictures: []
+            pictures: [],
         }
     },
     beforeRouteEnter(to, from, next) {
-      /*  var storage = firebaseApp.storage("gs://vnshoptest.appspot.com");
-        var curImgUrl = null
-            // First we sign in the user anonymously
-        firebaseApp.auth().signInAnonymously().then(function() {
-                // Once the sign in completed, we get the download URL of the image
-                
-                    var fileName = 'images/' + to.params.product_id + '_0'
-                    var pathReference = storage.ref(fileName)
-                    console.log(pathReference)
-                    pathReference.getDownloadURL().then(function(url) {
-                        // Once we have the download URL, we set it to our img element
-                        curImgUrl = url
-                        console.log(url);
-                    });
-        });
-        */
-        // https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2FbX572QaOCEfqMODWKAzW_0?alt=media&token=d5334ef0-25a3-4e9c-82c5-44185e4a72e7
-
         var db = firebaseApp.firestore();
-//        console.log("routerbeforeenter: " + to.params.product_id)
-        
         var docRef = db.collection("products").doc(to.params.product_id);
         docRef.get().then(function(doc) {
             if (doc.exists) {
@@ -108,6 +84,7 @@ export default {
                         vm.size = doc.data().size
                         vm.pictures = doc.data().picsUrl
                     })
+                    console.log(doc.data().picsUrl)
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");

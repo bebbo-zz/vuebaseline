@@ -1,33 +1,33 @@
 <template>
-<div>
-    <div class="fixed-action-btn">
-        <router-link to="/new" class="btn-floating btn-large red">
-            <i class="fa fa-plus"></i>
-        </router-link>
-    </div>
-    <div class="row" v-for="i in Math.ceil(products.length / 3)" v-bind:key="i">
-        <div v-for="product in products.slice((i - 1) * 3, i * 3)" v-bind:key="product.id" class="col-md-4 col-6 my-1">
-            <b-card 
-                v-bind:img-src="product.thumbUrl"
-                img-fluid
-                img-alt="image"
-                overlay>
-            <!-- img-src="https://picsum.photos/400/400/?image=41"
-                 {{item}} -->
-                <div slot="footer">
-                    <small class="text-muted">{{product.name}}<br />{{product.price}} VND</small>   
-                </div>
-                    <router-link v-bind:to="{name: 'view-product', params: {product_id: product.product_id}}" class="secondary-content">
-                        <i class="fa fa-eye"></i>
-                    </router-link>
-                    <router-link v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
-                        <i class="fa fa-pencil"></i>
-                    </router-link>
-                    <button @click='addToCart(product)' class='button is-info'><i class="fa fa-cart-arrow-down"></i></button>
-            </b-card>
+    <div>
+        <div class="fixed-action-btn">
+            <router-link to="/new" class="btn-floating btn-large red">
+                <i class="fa fa-plus"></i>
+            </router-link>
+        </div>
+        <div class="row" v-for="i in Math.ceil(products.length / 3)" v-bind:key="i">
+            <div v-for="product in products.slice((i - 1) * 3, i * 3)" v-bind:key="product.id" class="col-md-4 col-6 my-1">
+                <b-card 
+                    v-bind:img-src="product.thumbUrl"
+                    img-fluid
+                    img-alt="image"
+                    overlay>
+                <!-- img-src="https://picsum.photos/400/400/?image=41"
+                    {{item}} -->
+                    <div slot="footer">
+                        <small class="text-muted">{{product.name}}<br />{{product.price}} VND</small>   
+                    </div>
+                        <router-link v-bind:to="{name: 'view-product', params: {product_id: product.product_id}}" class="secondary-content">
+                            <i class="fa fa-eye"></i>
+                        </router-link>
+                        <router-link v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
+                            <i class="fa fa-pencil"></i>
+                        </router-link>
+                        <button @click='addToCart(product)' class='button is-info'><i class="fa fa-cart-arrow-down"></i></button>
+                </b-card>
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -40,7 +40,6 @@ export default {
     data () {
         return {
             products: []
-            //imageLink: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png'  
         }
     },
     created () {
@@ -71,7 +70,6 @@ export default {
                 }
                 this.products.push(data)
             })
-            this.fetchData()
         }) 
     },
     computed: mapGetters({
@@ -80,30 +78,7 @@ export default {
     }),
     methods: {
         ...mapActions(['addToCart'])
-   /*     fetchData: function () {
-           var vm = this
-
-            var storage = firebaseApp.storage("gs://vnshoptest.appspot.com");
-            // First we sign in the user anonymously
-            firebaseApp.auth().signInAnonymously().then(function() {
-                // Once the sign in completed, we get the download URL of the image
-                
-                vm.products.forEach(product => {
-                    var fileName = 'images/' + product.product_id + '_0'
-                    var pathReference = storage.ref(fileName)
-                    pathReference.getDownloadURL().then(function(url) {
-                        // Once we have the download URL, we set it to our img element
-                        product.imageUrl = url
-                    //    console.log(url);
-                    });
-                }).catch(function(error) {
-                // If anything goes wrong while getting the download URL, log the error
-                console.error(error);
-                });
-            });
-        } */
     }
-    //  https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png
 }
 </script>
     

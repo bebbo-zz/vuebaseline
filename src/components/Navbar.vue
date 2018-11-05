@@ -1,4 +1,5 @@
 <template>
+    <div>
         <b-navbar toggleable="md" type="dark" variant="info">
                 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
@@ -9,12 +10,10 @@
                 </router-link-->
                 <b-row align-h="start">
                     <b-button v-on:click="home"><i class="fa fa-home"></i></b-button>                
-                    
                     <b-dropdown text="Category">
                             <b-dropdown-item href="#">Clothes</b-dropdown-item>
                             <b-dropdown-item href="#">Kitchen</b-dropdown-item>
                     </b-dropdown>
-                    
                     <!--input size="sm" class="mr-sm-2" type="text" placeholder="Search" width="150" /-->
                     <b-button><i class="fa fa-search"></i></b-button>
                     <!-- maybe fas fa-user-circle -->
@@ -26,9 +25,26 @@
                     <b-button v-if="isEmployee" v-on:click="cashier"><i class="fa fa-laptop"></i></b-button>
                     <b-button v-if="isEmployee" v-on:click="admin"><i class="fa fa-wrench"></i></b-button>
                     <!--router-link to="/register"><b-button>Register</b-button></router-link-->
+                    <b-button v-on:click="language"><i class="fa fa-globe"></i></b-button>
                 </b-row>
             </b-collapse>
         </b-navbar>
+
+
+        <b-modal 
+            ref="modalLang" 
+            title="Select Language"
+            hide-footer>
+            <b-row>
+                <b-col>
+                    <button type="button" @click="changeLang('en')" class="btn">English</button>
+                </b-col>
+                <b-col>
+                    <button type="button" @click="changeLang('vn')" class="btn">Tiếng Việt</button>
+                </b-col>
+            </b-row>
+        </b-modal>
+    </div>
 </template>
 
 <script>
@@ -101,6 +117,13 @@ export default {
             console.log('home')
             this.$router.push('/login')
             e.preventDefault()
+        },
+        language: function(e) {
+            this.$refs.modalLang.show() 
+        },
+        changeLang(lang) {
+            this.$i18n.locale = lang
+            this.$refs.modalLang.hide()
         }
     }
 }

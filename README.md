@@ -57,18 +57,16 @@ npm run build --report
 - different user roles (employee); 
 - automated size adjustment when uploading thumb picture
 - download images
+- multi language
+- picture carousel
 
 # in the pipeline
-
-- anonymous has to be disabled latest when super user login implemented
 
 - user authentication email https://firebase.google.com/docs/auth/web/email-link-auth
     (some whitelisting of url is necessary)
 
-- picture carousel
-
 - diagrams on sells and profit overview
 
-- multi language
+- search and tags
 
 ```
