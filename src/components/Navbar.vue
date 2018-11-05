@@ -18,13 +18,13 @@
                     <!--input size="sm" class="mr-sm-2" type="text" placeholder="Search" width="150" /-->
                     <b-button><i class="fa fa-search"></i></b-button>
                     <!-- maybe fas fa-user-circle -->
-                    <span v-if="isLoggedIn" class="black-text">{{currentUser}}</span>
+                    <!--span v-if="isLoggedIn" class="black-text">{{currentUser}}</span-->
                     <b-button v-if="isLoggedIn"><i class="fa fa-user-circle"></i></b-button>
                     <b-button v-if="!isLoggedIn" v-on:click="login"><i class="fa fa-lock"></i></b-button>                    
                     <b-button v-if="isLoggedIn" v-on:click="logout"><i class="fa fa-unlock"></i></b-button>
                     <b-button v-on:click="cart"><i class="fa fa-shopping-cart"></i></b-button>
-                    <b-button v-on:click="cashier"><i class="fa fa-laptop"></i></b-button>
-                    <b-button v-on:click="admin"><i class="fa fa-user-lock"></i></b-button>
+                    <b-button v-if="isEmployee" v-on:click="cashier"><i class="fa fa-laptop"></i></b-button>
+                    <b-button v-if="isEmployee" v-on:click="admin"><i class="fa fa-wrench"></i></b-button>
                     <!--router-link to="/register"><b-button>Register</b-button></router-link-->
                 </b-row>
             </b-collapse>
@@ -40,7 +40,8 @@ export default {
     data () {
         return {
             isLoggedIn: false,
-            currentUser: false
+            currentUser: false,
+            isEmployee: false,
         }
     },
   /*  computed: {
@@ -53,6 +54,18 @@ export default {
         if(firebaseApp.auth().currentUser) {
             this.isLoggedIn = true
             this.currentUser = firebaseApp.auth().currentUser.email
+            console.log("this current user " + this.currentUser)
+
+            var db = firebaseApp.firestore();
+            db.collection('users').where('email', '==', this.currentUser).get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    var role = doc.data().role
+                    if(role == 'employee') {
+                        this.isEmployee = true
+                    }
+                })
+            })
         }
     },
     methods: {
@@ -77,8 +90,10 @@ export default {
             e.preventDefault()
         },
         logout: function(e) {
+            console.log('logout')
             firebaseApp.auth().signOut().then(() => {
-                this.$router.push('/')
+                console.log('start to route')
+                this.$router.go({path: this.$router.path});
             })
             e.preventDefault()
         },

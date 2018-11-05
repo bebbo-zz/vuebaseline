@@ -4,8 +4,17 @@
             <b-row>
                 <b-col>
                     <!-- Gallerie -->
+                    <b-carousel id="carousel1"
+                        controls
+                        indicators
+                        background="#ffffff"
+                        :interval="4000"
+                    >
+                        <b-carousel-slide v-for="picture in pictures" v-bind:key="picture">
+                            <img v-bind:src="picture" />
+                        </b-carousel-slide>
+                    </b-carousel>
                     <!-- v-for="item in upcomingMovies.slice(0, 3)" -->
-                    <img v-bind:src="pictures[0]" width="400" height="400" />
                 </b-col>
                 <b-col>
                     <ul class="colection with-header">

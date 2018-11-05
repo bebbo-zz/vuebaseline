@@ -49,8 +49,26 @@ npm run build
 npm run build --report
 ```
 
+## Features 
 
+``` bash
+# already existing
+- mass loading for new products seems as we need to load all fields even if empty
+- different user roles (employee); 
+- automated size adjustment when uploading thumb picture
+- download images
 
+# in the pipeline
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-# vue baseline
+- anonymous has to be disabled latest when super user login implemented
+
+- user authentication email https://firebase.google.com/docs/auth/web/email-link-auth
+    (some whitelisting of url is necessary)
+
+- picture carousel
+
+- diagrams on sells and profit overview
+
+- multi language
+
+```
