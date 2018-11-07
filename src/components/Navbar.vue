@@ -1,20 +1,10 @@
 <template>
     <div>
         <b-navbar toggleable="md" type="dark" variant="info">
-                
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-
             <b-collapse is-nav id="nav_collapse">
-                <!--router-link to="/" class="brand-logo">
-                    
-                </router-link-->
                 <b-row align-h="start">
                     <b-button v-on:click="home"><i class="fa fa-home"></i></b-button>                
-                    <b-dropdown text="Category">
-                            <b-dropdown-item href="#">Clothes</b-dropdown-item>
-                            <b-dropdown-item href="#">Kitchen</b-dropdown-item>
-                    </b-dropdown>
-                    <b-button><i class="fa fa-search"></i></b-button>
                     <!--span v-if="isLoggedIn" class="black-text">{{currentUser}}</span-->
                     <!--b-button v-if="isLoggedIn"><i class="fa fa-user-circle"></i></b-button-->
                     <b-button v-if="!isLoggedIn" v-on:click="login"><i class="fa fa-lock"></i></b-button>                    
@@ -27,7 +17,6 @@
                 </b-row>
             </b-collapse>
         </b-navbar>
-
 
         <b-modal 
             ref="modalLang" 

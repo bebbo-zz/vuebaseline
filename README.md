@@ -29,11 +29,14 @@ and copy credentials from firebase
 # cors setup
 install gcloud util
 follow cors instructions
+cd to cors.json folder
+gsutil cors set cors.json gs://<your-store>>
+vnshoptest.appspot.com
 
 ```
 
 
-## Build Setup
+## Build Dev
 
 ``` bash
 # install dependencies
@@ -42,8 +45,26 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
+```
+
+# build for production
+
+``` bash
+
+# deploy on github.io
+- create github.io repository
+- create folder dist
+
 npm run build
+
+cd ..
+cd dist
+
+git add *
+git commit -am "new deploy"
+git push -u origin master
+
+- copy dist output in dist folder linked to github.io repo
 
 # build for production and view the bundle analyzer report
 npm run build --report

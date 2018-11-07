@@ -13,13 +13,14 @@ export default {
   data () {
       return {
         products: [
-          //   { barcode: '123456', name: 'test product', name_ger: 'test produkt', price: 123.00 },
-          { barcode: '4333991030791', name: 'Pepperts clogs bé gái, xanh turkis', name_ger: 'pepperts maedchen clogs, sz 30/31, turkis' , price: 160000 }
-        ]
+//           { name_ger: 'Garnier body intensive, peach', name: 'Sữa dưỡng thể Garnier chiết xuất đào', size: '250ml', colour: '', category: 'Làm đẹp- sức khoẻ', price: 135000, barcode: '3600542098182', article_number: '', description: '' }, 
+
+      ]
       }
   },
   methods: {
       productUpload() {
+        console.log("start upload")
         var db = firebaseApp.firestore();
         this.products.forEach(item => {
           db.collection('products').add({
@@ -27,14 +28,20 @@ export default {
               name: item.name,
               name_ger: item.name_ger,
               price: item.price,
+              size: item.size,
+              colour: item.colour,
+              category: item.category,
+              article_number: item.article_number,
+              description: ''
           })
           .then(docRef => {
-              console.log("product added")
+           //   console.log("product added")
           })
           .catch(error => {
               console.log(err)
           })
         });
+        console.log("finished upload")
       },
       deleteProducts() {
         var db = firebaseApp.firestore();
@@ -46,11 +53,17 @@ export default {
         });
       },
       deleteAll() {
+        console.log("delete started")
         var db = firebaseApp.firestore();
-        db.collection("products").where('barcode', '!=', '123123').get()
+        db.collection("products").where('barcode', '>', '123123').get()
           .then(querySnapshot => {
-              querySnapshot.forEach(doc => { doc.delete();})
+              querySnapshot.forEach(doc => { doc.ref.delete();})
           })
+        db.collection("products").where('barcode', '<', '123123').get()
+          .then(querySnapshot => {
+              querySnapshot.forEach(doc => { doc.ref.delete();})
+          })
+        console.log("delete finished")
       }
   }
 }
