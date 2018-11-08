@@ -48,10 +48,10 @@ export default {
     },
 
     paginationRange() {
-      let start = this.currentPage - this.visiblePages / 2 <= 0
-      ? 1 : 
-        this.currentPage + this.visiblePages / 2 > this.lastPage
-        ? Util.lowerBound(this.lastPage - this.visiblePages + 1, 1)
+      let start =
+        this.currentPage - this.visiblePages / 2 <= 0
+        ? 1 : this.currentPage + this.visiblePages / 2 > this.lastPage
+        ? this.lowerBound(this.lastPage - this.visiblePages + 1, 1)
         : Math.ceil(this.currentPage - this.visiblePages / 2)
 
       let range = []
@@ -69,6 +69,9 @@ export default {
     },
     pageChanged (pageNum) {
       this.$emit('page-changed', pageNum)
+    },
+    lowerBound (num, limit) {
+      return num >= limit ? num : limit
     }
   }
 }
