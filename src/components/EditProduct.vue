@@ -460,24 +460,28 @@ export default {
                     var image = new Image();
                     image.onload = function (imageEvent) {
                         // Resize the image
+                        var newx = 0
+                        var newy = 0
                         var canvas = document.createElement('canvas'),
                             max_size = 250,// TODO : pull max size from a site config
                             width = image.width,
-                            height = image.height;
+                            height = image.height
                         if (width > height) {
                                 if (width > max_size) {
-                                    height *= max_size / width;
-                                    width = max_size;
+                                    height *= max_size / width
+                                    newy = (max_size - height) / 2
+                                    width = max_size
                                 }
                             } else {
                                 if (height > max_size) {
-                                    width *= max_size / height;
-                                    height = max_size;
+                                    width *= max_size / height
+                                    newx = (max_size - width) / 2
+                                    height = max_size
                                 }
                             }
-                            canvas.width = width;
-                            canvas.height = height;
-                            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+                            canvas.width = max_size;
+                            canvas.height = max_size;
+                            canvas.getContext('2d').drawImage(image, newx, newy, width, height);
                             canvas.toBlob((blob) => {
                                 console.log("twelve" + blob); //output image as a blob
                                 curBlob = blob;

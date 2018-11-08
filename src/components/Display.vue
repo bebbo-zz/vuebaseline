@@ -17,7 +17,7 @@
             </b-col>
             <b-col>
                 <div style="{display: block}">
-                <input v-model="txtSearch" style="{ width: 40% }" type="text" placeholder="Search..." />
+                <input v-model="txtSearch" class="kleiner" type="text" placeholder="Search..." />
                 <b-btn variant="info" v-on:click="search"><i class="fa fa-search"></i></b-btn>
                 </div>
             </b-col>
@@ -260,4 +260,10 @@ export default {
     }
 }
 </script>
+
+<style>
+input.kleiner {
+  width: 80% !important;
+}
+</style>
     

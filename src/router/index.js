@@ -14,6 +14,7 @@ import firebaseApp from '@/components/firebaseInit'
 import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
+Vue.config.productionTip = false
 
 let router = new Router({
   routes: [
