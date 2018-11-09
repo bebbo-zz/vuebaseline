@@ -28,26 +28,26 @@
 <script>
 import firebaseApp from './firebaseInit'
 export default {
-    name: 'login',
-    data: function() {
-        return {
-            email: '',
-            password: ''
-        };
-    },
-    methods: {
-        login: function(e) {
-            console.log('register');
-            firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
-                .then(user => {
-                  //  alert('You are logged in as ${user.email}');
-                    this.$router.go({path: this.$router.path});
-                },
-                err => {
-                    alert(err.message);
-                });
-            e.preventDefault();
-        }
+  name: 'login',
+  data: function() {
+    return {
+      email: '',
+      password: ''
+    };
+  },
+  methods: {
+    login: function(e) {
+      console.log('register')
+      firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
+        .then(user => {
+          //  alert('You are logged in as ${user.email}');
+          this.$router.go({path: this.$router.path})
+        },
+        err => {
+          alert(err.message)
+      });
+      e.preventDefault()
     }
+  }
 };
 </script>

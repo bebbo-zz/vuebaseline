@@ -14,7 +14,6 @@ import firebaseApp from '@/components/firebaseInit'
 import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
-Vue.config.productionTip = false
 
 let router = new Router({
   routes: [
@@ -91,37 +90,37 @@ let router = new Router({
 // Nav Guards
 router.beforeEach((to, from, next) => {
   // check for requiredAuth
-  if(to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     // check if NOT logged in
-    if(!firebaseApp.auth().currentUser) {
+    if (!firebaseApp.auth().currentUser) {
       // go to login page
       next({
         path: '/login',
         query: {
           redirect: to.fullPath
         }
-      });
+      })
     } else {
       // proceed to route
-      next();
+      next()
     }
-  } else if(to.matched.some(record => record.meta.requiresGuest)) {
+  } else if (to.matched.some(record => record.meta.requiresGuest)) {
     // check if logged in
-    if(firebaseApp.auth().currentUser) {
+    if (firebaseApp.auth().currentUser) {
       // go to login page
       next({
         path: '/',
         query: {
           redirect: to.fullPath
         }
-      });
+      })
     } else {
       // proceed to route
-      next();
+      next()
     }
   } else {
-    next();
+    next()
   }
 })
 
-export default router;
+export default router

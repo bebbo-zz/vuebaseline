@@ -39,6 +39,10 @@ vnshoptest.appspot.com
 ## Build Dev
 
 ``` bash
+
+# latest packages to get all
+npm --depth 9999 update
+
 # install dependencies
 npm install
 
@@ -59,6 +63,9 @@ npm run build
 
 cd ..
 cd dist
+
+git pull master -- or something
+
 
 git add *
 git commit -am "new deploy"
@@ -81,11 +88,13 @@ npm run build --report
 - multi language
 - picture carousel
 - manual entry and remove from cart
+- resizing is right now making it much smaller but should keep it white and 
+put the picture in the middle
+
 
 # in the pipeline
 
-- resizing is right now making it much smaller but should keep it white and 
-put the picture in the middle
+- tags for search
 
 - printout receipt; https://www.npmjs.com/package/node-thermal-printer; 
 https://reference.epson-biz.com/modules/ref_epos_sdk_js_en/index.php?content_id=1

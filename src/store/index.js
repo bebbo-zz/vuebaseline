@@ -2,7 +2,6 @@ import 'es6-promise/auto'
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import * as types from './mutation-types'
 
 Vue.use(Vuex)
 
@@ -10,28 +9,28 @@ const debug = process.env.NODE_ENV !== 'production'
 
 // initial state
 const state = {
-    added: [],
-    totalSum: 0
-  }
+  added: [],
+  totalSum: 0
+}
 
 // getters
 const getters = {
-    getNumberOfProducts: state => (state.added) ? state.added.length : 0,
-    cartProducts: state => state.added
-  }
+  getNumberOfProducts: state => (state.added) ? state.added.length : 0,
+  cartProducts: state => state.added
+}
   
-  // actions
-  const actions = {
-    addToCart({ commit }, product){ 
-      commit('addToCart', product)
-    },
-    removeFromCart({commit}, item){
-      commit('removeFromCart', item)
-    },
-    moveTotalSum({commit}, totalSumIn){
-      commit('moveTotalSum', totalSumIn)
-    }
+// actions
+const actions = {
+  addToCart({ commit }, product){ 
+    commit('addToCart', product)
+  },
+  removeFromCart({commit}, item){
+    commit('removeFromCart', item)
+  },
+  moveTotalSum({commit}, totalSumIn){
+    commit('moveTotalSum', totalSumIn)
   }
+}
 
 // mutations
 const mutations = {
@@ -43,15 +42,15 @@ const mutations = {
       console.log("product id: " + product.product_id)
       console.log(product.name)
           state.added.push(product)
-          if(product.quantity == undefined) {
+          if (product.quantity == undefined) {
             Vue.set(product, 'quantity', 1)
             Vue.set(product, 'totalPrice', product.price)
           }
     } else {
           var additionalQuantity = 1
-          if(product.quantity == undefined) {
+          if (product.quantity == undefined) {
             additionalQuantity = 1
-          }else{
+          } else {
             additionalQuantity = product.quantity
           }
           record.quantity = record.quantity + additionalQuantity
@@ -74,9 +73,9 @@ const mutations = {
 
 // one store for entire application
 export default new Vuex.Store({
-    state,
-    strict: debug,
-    getters,
-    actions,
-    mutations
-  })
+  state,
+  strict: debug,
+  getters,
+  actions,
+  mutations
+})

@@ -1,56 +1,56 @@
 <template>
-    <div id="new-product">
-        <h3>New Product</h3>
+  <div id="new-product">
+    <h3>New Product</h3>
+    <div class="row">
+      <form @submit.prevent="saveProduct" class="col s12">
         <div class="row">
-            <form @submit.prevent="saveProduct" class="col s12">
-                <div class="row">
-                    <div class="input-field col s6">
-                        <input type="text" v-model="barcode" required>
-                        <label>Barcode</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input type="text" v-model="article_number" required>
-                        <label>Article Number</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input type="text" v-model="name_ger" required>
-                        <label>Name (German)</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input type="text" v-model="name" required>
-                        <label>Name (Display)</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s6">
-                        <input type="text" v-model="price" required>
-                        <label>Price</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input type="text" v-model="category" required>
-                        <label>Category</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input type="text" v-model="description" required>
-                        <label>Description</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
-                    </div>
-                </div>
-                <button type="submit" class="btn"><i class="fa fa-save"></i></button>
-                <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
-            </form>
+          <div class="input-field col s6">
+            <input type="text" v-model="barcode" required>
+            <label>Barcode</label>
+          </div>
+          <div class="input-field col s6">
+            <input type="text" v-model="article_number" required>
+            <label>Article Number</label>
+          </div>
         </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" v-model="name_ger" required>
+            <label>Name (German)</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" v-model="name" required>
+            <label>Name (Display)</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input type="text" v-model="price" required>
+            <label>Price</label>
+          </div>
+          <div class="input-field col s6">
+            <input type="text" v-model="category" required>
+            <label>Category</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" v-model="description" required>
+            <label>Description</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
+          </div>
+        </div>
+        <button type="submit" class="btn"><i class="fa fa-save"></i></button>
+        <router-link to="/" class="btn grey"><i class="fa fa-ban"></i></router-link>
+      </form>
     </div>
+  </div>
 </template>
 
 <script>

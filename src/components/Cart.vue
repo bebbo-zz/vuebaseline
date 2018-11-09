@@ -26,7 +26,6 @@
         		<td><b>{{ total }} VND</b></td>
         	</tr>
     	</tbody>
-
     </table>
     <p><button v-show="products.length" class='btn' @click='checkout'>Checkout</button></p>
   </div>
