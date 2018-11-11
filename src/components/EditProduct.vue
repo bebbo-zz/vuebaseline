@@ -246,6 +246,7 @@ export default {
       var db = firebaseApp.firestore();
       var docRef = db.collection("products").doc(this.$route.params.product_id);
       // db.collection('products').where('barcode', '==', this.$route.params.product_id).get()
+      console.log("here to update")
       if (this.article_number == undefined) {
           this.article_number = ''
       }
@@ -263,6 +264,15 @@ export default {
       }
       if (this.thumbUrl == undefined) {
           this.thumbUrl = ''
+      }
+      if (this.name_ger == undefined) {
+          this.name_ger = ''
+      }
+      if (this.picsUrl == undefined) {
+        this.picsUrl = []
+        this.picsReference = []
+        this.picsMaxRef = -1
+        this.picsLength = 0
       }
       if (this.tags == undefined) {
           this.tags = []
@@ -285,7 +295,11 @@ export default {
         tags: this.tags
       })
       .then(() => {
+        console.log("it worked")
         this.$router.push({name: 'edit-product', params: {product_id: this.product_id}}) 
+      })
+      .catch(error => {
+          console.log(err)
       })
     },
     deletePicture(i) {
@@ -298,13 +312,14 @@ export default {
     },  
     downloadPicture(i) {
       console.log("download: " + this.picsUrl[i])
+      var downloadString = this.picsReference[i] + 'jpg'
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
       xhr.onload = function(event) {
         var returnedBlob = new Blob([xhr.response], {type: 'image/jpeg'});
         var link = document.createElement('a')
         link.href = window.URL.createObjectURL(returnedBlob)
-        link.download = this.picsReference[i] + 'jpg'
+        link.download = downloadString
         link.click()
       };
       xhr.open('GET', this.picsUrl[i]);
@@ -369,46 +384,46 @@ export default {
           var curReference = this.picsMaxRef + 1
       }
       var vm = this
-        if (curFile != null) {
-          console.log("start importing")
-          var storageRef = firebaseApp.storage().ref();
-          var storageSpace = "images/" + curProductID + "_" + curReference
-          var imageRef = storageRef.child(storageSpace)
-          var uploadTask = imageRef.put(curFile);
-          // Register three observers:
-          // 1. 'state_changed' observer, called any time the state changes
-          // 2. Error observer, called on failure
-          // 3. Completion observer, called on successful completion
-          uploadTask.on('state_changed', function(snapshot){
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          switch (snapshot.state) {
-              case firebaseApp.storage.TaskState.PAUSED: // or 'paused'
-              console.log('Upload is paused');
-              break;
-              case firebaseApp.storage.TaskState.RUNNING: // or 'running'
-              console.log('Upload is running');
-              break;
-          }
-          }, function(error) {
-          // Handle unsuccessful uploads
-              console.log(error)
-          }, function() {
-              // Handle successful uploads on complete
-              // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-              uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                  console.log('File available at', downloadURL);
-                  vm.picsUrl.push(downloadURL);
-                  vm.picsReference.push(curProductID + "_" + curReference);
-                  vm.picsLength = vm.picsLength + 1;
-                  vm.picsMaxRef = curReference;
-                  vm.file = null;
-                  vm.updateProduct();
-              })
-              // hier sollte das images ebenfalls in die Datenbank geschrieben werden
+      if (curFile != null) {
+        console.log("start importing")
+        var storageRef = firebaseApp.storage().ref();
+        var storageSpace = "images/" + curProductID + "_" + curReference
+        var imageRef = storageRef.child(storageSpace)
+        var uploadTask = imageRef.put(curFile);
+        // Register three observers:
+        // 1. 'state_changed' observer, called any time the state changes
+        // 2. Error observer, called on failure
+        // 3. Completion observer, called on successful completion
+        uploadTask.on('state_changed', function(snapshot){
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebaseApp.storage.TaskState.PAUSED: // or 'paused'
+          console.log('Upload is paused');
+          break;
+          case firebaseApp.storage.TaskState.RUNNING: // or 'running'
+          console.log('Upload is running');
+          break;
+        }
+        }, function(error) {
+        // Handle unsuccessful uploads
+          console.log(error)
+        }, function() {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log('File available at', downloadURL);
+            vm.picsUrl.push(downloadURL);
+            vm.picsReference.push(curProductID + "_" + curReference);
+            vm.picsLength = vm.picsLength + 1;
+            vm.picsMaxRef = curReference;
+            vm.file = null;
+            vm.updateProduct();
           })
+          // hier sollte das images ebenfalls in die Datenbank geschrieben werden
+        })
       }
     },
     uploadThumbFile() {
@@ -416,84 +431,82 @@ export default {
         var runthrough = this.getResizedBlob()
     },
     uploadBlob(curBlob, mime) {
-        var curProductID = this.$route.params.product_id
-        var vm = this
-        console.log("twenty")
-        var storageRef = firebaseApp.storage().ref();
-        var storageSpace = "images/" + curProductID + "_thumb"
-        var imageRef = storageRef.child(storageSpace)
-          console.log("twentyone")
-          var uploadTask = imageRef.put(curBlob, { contentType: mime })
-          console.log("twentytwo")
-                      uploadTask.on('state_changed', function(snapshot){
-                          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                          console.log('Upload is ' + progress + '% done');
-                      }, function(error) {
-                          // Handle unsuccessful uploads
-                          console.log(error)
-                      }, function() {
-                          // Handle successful uploads on complete
-                          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                              console.log('File available at', downloadURL);
-                              vm.thumbUrl = downloadURL;
-                              vm.thumbFile = null;
-                          })
-                          // hier sollte das images ebenfalls in die Datenbank geschrieben werden
-                      })
-      },
-      getResizedBlob: function() {
-            // Read in file
-            var outputQuality = 1;
-            var file = this.thumbFile;
-            var curBlob = null;
-            var vm = this
-
-                // Load the image
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function (readerEvent) {
-                    var image = new Image();
-                    image.onload = function (imageEvent) {
-                        // Resize the image
-                        var newx = 0
-                        var newy = 0
-                        var canvas = document.createElement('canvas'),
-                            max_size = 250,// TODO : pull max size from a site config
-                            width = image.width,
-                            height = image.height
-                        if (width > height) {
-                                if (width > max_size) {
-                                    height *= max_size / width
-                                    newy = (max_size - height) / 2
-                                    width = max_size
-                                }
-                            } else {
-                                if (height > max_size) {
-                                    width *= max_size / height
-                                    newx = (max_size - width) / 2
-                                    height = max_size
-                                }
-                            }
-                            canvas.width = max_size;
-                            canvas.height = max_size;
-                            canvas.getContext('2d').drawImage(image, newx, newy, width, height);
-                            canvas.toBlob((blob) => {
-                                console.log("twelve" + blob); //output image as a blob
-                                curBlob = blob;
-                                //const file = new File([blob], this.thumbFile, {
-                                //    type: 'image/jpeg',
-                                //    lastModified: Date.now()
-                               // }); //output image as a file
-                               vm.uploadBlob(blob, 'image/jpeg')
-                            }, 'image/jpeg', outputQuality);
-                    }
-                    image.src = readerEvent.target.result;
-                }
-            
-            console.log("thirdteen: ")
-            return "done";
+      var curProductID = this.$route.params.product_id
+      var vm = this
+      console.log("twenty")
+      var storageRef = firebaseApp.storage().ref();
+      var storageSpace = "images/" + curProductID + "_thumb"
+      var imageRef = storageRef.child(storageSpace)
+      console.log("twentyone")
+      var uploadTask = imageRef.put(curBlob, { contentType: mime })
+      console.log("twentytwo")
+      uploadTask.on('state_changed', function(snapshot){
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      }, function(error) {
+        // Handle unsuccessful uploads
+        console.log(error)
+      }, function() {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          console.log('File available at', downloadURL);
+          vm.thumbUrl = downloadURL;
+          vm.thumbFile = null;
+        })
+        // hier sollte das images ebenfalls in die Datenbank geschrieben werden
+      })
+    },
+    getResizedBlob: function() {
+      // Read in file
+      var outputQuality = 1
+      var file = this.thumbFile
+      var curBlob = null
+      var vm = this
+      // Load the image
+      var reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function (readerEvent) {
+        var image = new Image()
+        image.onload = function (imageEvent) {
+          // Resize the image
+          var newx = 0
+          var newy = 0
+          var canvas = document.createElement('canvas'),
+            max_size = 250,// TODO : pull max size from a site config
+            width = image.width,
+            height = image.height
+          if (width > height) {
+            if (width > max_size) {
+              height *= max_size / width
+              newy = (max_size - height) / 2
+              width = max_size
+            }
+          } else {
+            if (height > max_size) {
+                width *= max_size / height
+                newx = (max_size - width) / 2
+                height = max_size
+            }
+          }
+          canvas.width = max_size;
+          canvas.height = max_size;
+          canvas.getContext('2d').drawImage(image, newx, newy, width, height);
+          canvas.toBlob((blob) => {
+            console.log("twelve" + blob); //output image as a blob
+            curBlob = blob;
+            //const file = new File([blob], this.thumbFile, {
+            //    type: 'image/jpeg',
+            //    lastModified: Date.now()
+            // }); //output image as a file
+            vm.uploadBlob(blob, 'image/jpeg')
+          }, 'image/jpeg', outputQuality);
         }
+        image.src = readerEvent.target.result;
+      }
+      console.log("thirdteen: ")
+      return "done"
     }
+  }
 }
 </script>

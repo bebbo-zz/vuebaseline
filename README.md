@@ -86,15 +86,14 @@ npm run build --report
 - automated size adjustment when uploading thumb picture
 - download images
 - multi language
-- picture carousel
 - manual entry and remove from cart
 - resizing is right now making it much smaller but should keep it white and 
 put the picture in the middle
-
+- tags for search
 
 # in the pipeline
 
-- tags for search
+- picture carousel improvements
 
 - printout receipt; https://www.npmjs.com/package/node-thermal-printer; 
 https://reference.epson-biz.com/modules/ref_epos_sdk_js_en/index.php?content_id=1
@@ -102,12 +101,10 @@ https://reference.epson-biz.com/modules/ref_epos_sdk_js_en/index.php?content_id=
 - buttons in display only when logged in (evtl this has to go into the store right away)
 because it is also in the router
 
-- prices in better number format
-
 # not highest priority
 - diagrams on sells and profit overview
-- search and tags
 - user authentication email https://firebase.google.com/docs/auth/web/email-link-auth
     (some whitelisting of url is necessary)
+
 
 ```

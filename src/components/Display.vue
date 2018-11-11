@@ -48,17 +48,11 @@
           img-alt="image"
           overlay>
           <div slot="footer">
-            <small class="text-muted">{{product.name}}<br />{{product.price}} VND</small>   
+            <small class="text-muted">{{ product.name }}<br />{{ formatPrice(product.price) }} VND</small>   
           </div>
-            <!--router-link v-bind:to="{name: 'view-product', params: {product_id: product.product_id}}" class="secondary-content">
-              <i class="fa fa-eye"></i>
-            </router-link-->
-            <!--router-link v-if="isEmployee" v-bind:to="{name: 'edit-product', params: {product_id: product.product_id}}" class="secondary-content">
-              <i class="fa fa-pencil"></i>
-            </router-link-->
-            <button @click='viewProduct(product.product_id)' class='button is-info'><i class="fa fa-eye"></i></button>
-            <button v-if="isEmployee" @click='editProduct(product.product_id)' class='button is-info'><i class="fa fa-pencil"></i></button>
-            <button @click='addToCart(product)' class='button is-info'><i class="fa fa-cart-arrow-down"></i></button>
+          <button @click='viewProduct(product.product_id)' class='button is-info'><i class="fa fa-eye"></i></button>
+          <button v-if="isEmployee" @click='editProduct(product.product_id)' class='button is-info'><i class="fa fa-pencil"></i></button>
+          <button @click='addToCart(product)' class='button is-info'><i class="fa fa-cart-arrow-down"></i></button>
         </b-card>
       </div>
     </div>
@@ -74,7 +68,7 @@ import Pagination from './Pagination.vue'
 export default {
   name: 'display',
   components : { Pagination },
-  data () {
+  data ( ) {
     return {
       txtSearch: null,
       isLoggedIn: false,
@@ -104,7 +98,7 @@ export default {
       }
     }
   },
-  beforeMount () {
+  beforeMount ( ) {
     console.log("running through only once")
     var db = firebaseApp.firestore();
     if (firebaseApp.auth().currentUser) {
@@ -122,7 +116,7 @@ export default {
       db.collection('products').get().then(querySnapshot => {
         querySnapshot.forEach(doc => {
           var thumbPicture = null
-          if (doc.data().thumbUrl == undefined) {
+          if ((doc.data().thumbUrl == undefined) || (doc.data().thumbUrl == '')) {
               thumbPicture = "https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2Fno-image-icon-6.png?alt=media&token=4b4b8e91-6525-4607-b845-b2e8f0ce3b98"
           } else {
               thumbPicture = doc.data().thumbUrl
@@ -150,6 +144,9 @@ export default {
   },
   methods: {
     ...mapActions(['addToCart']),
+    formatPrice( value ) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    },
     search() {
       console.log("simple search");
       // clear products
@@ -157,6 +154,9 @@ export default {
       // normally all combined with category
       var oneleft = ""
       var oneright = ""
+      var twoleft = "1"
+      var twomiddle = "=="
+      var tworight = "1"
       var columnBarcode = "barcode"
       var columnArticleNumber = "arctile_number"
       var columnName = "name"
@@ -168,7 +168,6 @@ export default {
         oneleft = "category"
         oneright = this.currentCategory
       }
-      console.log("txtSearch " + this.txtSearch)
       if ((this.txtSearch == "") || (this.txtSearch == null) || (this.txtSearch == undefined)) {
         twoleft = "1"
         twomiddle = "=="
@@ -178,17 +177,34 @@ export default {
         this.singleSearch(oneleft, oneright, "barcode", "==", this.txtSearch)
         this.singleSearch(oneleft, oneright, "article_number", "==", this.txtSearch)
         this.singleSearch(oneleft, oneright, "name", "==", this.txtSearch)
-        this.singleSearch(oneleft, oneright, "tags", "array_contains", this.txtSearch)
+       // this.singleSearch(oneleft, oneright, "tags", "array_contains", this.txtSearch)
       }               
     },
     singleSearch(oneleft, oneright, twoleft, twomiddle, tworight) {
       console.log("col1 " + oneleft + " col2 " + oneright)
       console.log("col3 " + twoleft + " col4 " + tworight)
       var db = firebaseApp.firestore();
-      db.collection('products').where(oneleft, "==", oneright).where(twoleft, twomiddle, tworight).get().then(querySnapshot => {
+
+      // 4008789-093905
+     // db.collection('products').where(oneleft, "==", oneright).where(twoleft, twomiddle, tworight).get().then(querySnapshot => {
+     var query = null
+     if(oneleft == "1") {
+       if(twoleft == "1") {
+         query = db.collection('products')
+       } else {
+         query = db.collection('products').where(twoleft, twomiddle, tworight)
+       }
+     } else {
+       if(twoleft == "1") {
+         query = db.collection('products').where(oneleft, "==", oneright)
+       } else {
+         query = db.collection('products').where(oneleft, "==", oneright).where(twoleft, twomiddle, tworight)
+       }
+     }
+     query.get().then(querySnapshot => {
         querySnapshot.forEach(doc => {
           var thumbPicture = null
-          if (doc.data().thumbUrl == undefined) {
+          if ((doc.data().thumbUrl == undefined) || (doc.data().thumbUrl == '')) {
             thumbPicture = "https://firebasestorage.googleapis.com/v0/b/vnshoptest.appspot.com/o/images%2Fno-image-icon-6.png?alt=media&token=4b4b8e91-6525-4607-b845-b2e8f0ce3b98"
           } else {
             thumbPicture = doc.data().thumbUrl
@@ -206,6 +222,7 @@ export default {
             'size': doc.data().size,
             'thumbUrl': thumbPicture
           }
+          console.log("found data " + data)
           this.productsAll.push(data)
         })
       this.resetPagination()

@@ -36,7 +36,7 @@ export default {
     };
   },
   methods: {
-    login: function(e) {
+    login: function( e ) {
       console.log('register')
       firebaseApp.auth().signInWithEmailAndPassword(this.email, this.password)
         .then(user => {

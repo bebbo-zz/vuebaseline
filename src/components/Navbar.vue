@@ -64,27 +64,27 @@ export default {
     }
   },
   methods: {
-    home: function(e) {
+    home: function( e ) {
       console.log('home')
       this.$router.push('/')
       e.preventDefault()
     },
-    cart: function(e) {
+    cart: function( e ) {
       console.log('cart')
       this.$router.push('/cart')
       e.preventDefault()
     },
-    cashier: function(e) {
+    cashier: function( e ) {
       console.log('cashier')
       this.$router.push('/cashier')
       e.preventDefault()
     },
-    admin: function(e) {
+    admin: function( e ) {
       console.log('admin')
       this.$router.push('/admin')
       e.preventDefault()
     },
-    logout: function(e) {
+    logout: function( e ) {
       console.log('logout')
       firebaseApp.auth().signOut().then(() => {
           console.log('start to route')
@@ -92,12 +92,12 @@ export default {
       })
       e.preventDefault()
     },
-    login: function(e) {
+    login: function( e ) {
       console.log('home')
       this.$router.push('/login')
       e.preventDefault()
     },
-    language: function(e) {
+    language: function( e ) {
       this.$refs.modalLang.show() 
     },
     changeLang(lang) {

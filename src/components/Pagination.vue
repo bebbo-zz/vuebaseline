@@ -37,26 +37,26 @@ export default {
     }
   },
   computed: {
-    lastPage() {
+    lastPage( ) {
       if (this.totalPages) {
         return this.totalPages
       } else {
         return this.totalItems % this.itmesPerPage === 0
           ? this.totalItems / this.itmesPerPage
-          : Math.floor(this.totalItems / this.itmesPerPage) + 1
+            : Math.floor(this.totalItems / this.itmesPerPage) + 1
       }
     },
 
-    paginationRange() {
+    paginationRange( ) {
       let start =
         this.currentPage - this.visiblePages / 2 <= 0
-        ? 1 : this.currentPage + this.visiblePages / 2 > this.lastPage
-        ? this.lowerBound(this.lastPage - this.visiblePages + 1, 1)
-        : Math.ceil(this.currentPage - this.visiblePages / 2)
+          ? 1 : this.currentPage + this.visiblePages / 2 > this.lastPage
+          ? this.lowerBound(this.lastPage - this.visiblePages + 1, 1)
+          : Math.ceil(this.currentPage - this.visiblePages / 2)
 
       let range = []
 
-      for(let i = 0; i < this.visiblePages && i < this.lastPage; i++) {
+      for (let i = 0; i < this.visiblePages && i < this.lastPage; i++) {
         range.push(start + i)
       }
 
