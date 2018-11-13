@@ -17,7 +17,7 @@
             <li class="collection-item">Article Number: {{article_number}}</li>
             <li class="collection-item">Name (German): {{name_ger}}</li>
             <li class="collection-item">Category: {{category}}</li>
-            <li class="collection-item">Description: {{description}}</li>
+            <li class="collection-item">Description: <span v-for="line in description.split('\n')" v-bind:key="line">{{line}}<br /></span></li>
           </ul>
         </b-col>
       </b-row>    

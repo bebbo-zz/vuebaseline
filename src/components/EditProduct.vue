@@ -46,7 +46,7 @@
             <div class="input-field col s12">
                 <label>Description</label>
                 <br />
-                <input type="text" v-model="description">
+                <b-form-textarea :rows="10" v-model="description"></b-form-textarea>
             </div>
         </div>
         <ul class="collection with-header">
@@ -54,7 +54,7 @@
             <h4>Thumb Image</h4>
               <b-form-file @change="thumbFileSelected" v-model="thumbFile" :state="Boolean(thumbFile)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a thumb picture..."></b-form-file>
               <br />
-              <button @click="uploadThumbFile" class="btn blue"><i class="fa fa-plus-circle"></i></button>
+              <!--button @click="uploadThumbFile" class="btn blue"><i class="fa fa-plus-circle"></i></button-->
           </li>
         </ul>
         <ul class="collection with-header">
@@ -62,7 +62,7 @@
             <h4>Images</h4>
             <b-form-file @change="fileSelected" v-model="file" :state="Boolean(file)" accept="image/jpeg, image/png, image/gif" placeholder="Choose a file..."></b-form-file>
             <br />
-            <button @click="uploadFile" class="btn blue"><i class="fa fa-plus-circle"></i></button>
+            <!--multiple="true" button @click="uploadFile" class="btn blue"><i class="fa fa-plus-circle"></i></button-->
           </li>
           <li v-for="i in picsLength" v-bind:key="i - 1" class="collection-item">
             <img v-bind:src="picsUrl[i - 1]" width="150" height="150" />
@@ -136,7 +136,7 @@ export default {
       price: null,
       size: null,
       tags: [],
-      file: null,
+      file: [],
       intakes: [],
       picsUrl: [],
       picsReference: [],
@@ -306,8 +306,19 @@ export default {
         console.log("delete picture number: " + i)
         if (confirm('Are you sure?')) {
             this.picsUrl.splice(i, 1)
-            this.picsReference.splice(i, 1)
+            var nameofref = this.picsReference.splice(i, 1)
             this.picsLength = this.picsLength - 1
+            var reference = nameofref[0]
+            var storage = firebaseApp.storage();
+            var storageRef = storage.ref();
+            var desertRef = storageRef.child('images/' + reference)
+            // Delete the file
+            desertRef.delete().then(function() {
+              // File deleted successfully
+              console.log("delete successful")
+            }).catch(function(error) {
+              // Uh-oh, an error occurred!
+            })
         }
     },  
     downloadPicture(i) {
@@ -364,10 +375,14 @@ export default {
     },
     fileSelected(event) {
         this.file = event.target.files[0]
+        console.log(event.target.files)
+        this.uploadFile()
+       // this.file.forEach(pic => { this.uploadFile (pic) })
        // console.log(this.file)
     },
     thumbFileSelected(event) {
         this.thumbFile = event.target.files[0]
+        this.uploadThumbFile()
       //  console.log(this.thumbFile)
     },
     uploadFile() {
